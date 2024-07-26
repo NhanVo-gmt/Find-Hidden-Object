@@ -20,12 +20,12 @@ public class SingletonObject<T> : MonoBehaviour where T : SingletonObject<T>
     {
         get
         {
-            if (Quitting)
-            {
-                Debug.LogWarning($"[{nameof(_instance)}<{typeof(T)}>] Instance will not be returned because the application is quitting.");
-                // ReSharper disable once AssignNullToNotNullAttribute
-                return null;
-            }
+            // if (Quitting)
+            // {
+            //     Debug.LogWarning($"[{nameof(_instance)}<{typeof(T)}>] Instance will not be returned because the application is quitting.");
+            //     // ReSharper disable once AssignNullToNotNullAttribute
+            //     return null;
+            // }
             lock (Lock)
             {
                 if (_instance != null)

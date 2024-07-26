@@ -1,18 +1,31 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class SceneLoader : MonoBehaviour
+public class SceneLoader : SingletonObject<SceneLoader>
 {
-    // Start is called before the first frame update
-    void Start()
+    public Action OnSceneFinishLoading;
+    
+    private void OnEnable()
     {
-        
+        SceneManager.sceneLoaded += SceneManager_OnSceneLoaded;
+    }
+    
+    private void SceneManager_OnSceneLoaded(UnityEngine.SceneManagement.Scene arg0, LoadSceneMode arg1)
+    {
+        OnSceneFinishLoading?.Invoke();
     }
 
-    // Update is called once per frame
-    void Update()
+    public static void LoadScene(Scene scene)
     {
-        
+        SceneManager.LoadScene(scene.ToString());
     }
+}
+
+public enum Scene
+{
+    LevelSelectScene,
+    GameScene
 }
