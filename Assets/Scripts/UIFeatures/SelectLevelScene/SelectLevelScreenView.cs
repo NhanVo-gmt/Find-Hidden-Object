@@ -30,13 +30,16 @@ namespace UIFeatures.LoadingScene
 
         public override UniTask BindData()
         {
+            this.View.playBtn.onClick.AddListener(() =>
+            {
+                this.sceneDirector.LoadGameScene();
+            });
             return UniTask.CompletedTask;
         }
     }
 
     public class SelectLevelScreenView : BaseView
     {
-        [SerializeField] private Slider sldLoading;
-        public                   Slider SldLoading => this.sldLoading;
+        public Button playBtn;
     }
 }

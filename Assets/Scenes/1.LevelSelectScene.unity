@@ -131,9 +131,45 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 375139587}
     m_Modifications:
+    - target: {fileID: -3465334302027320220, guid: f5420641f9b64a841949eb51432bbacb, type: 3}
+      propertyPath: playBtn
+      value: 
+      objectReference: {fileID: 79127302}
     - target: {fileID: 383420067775625194, guid: f5420641f9b64a841949eb51432bbacb, type: 3}
       propertyPath: m_Name
       value: SelectLevelScreenView
+      objectReference: {fileID: 0}
+    - target: {fileID: 388938153398864104, guid: f5420641f9b64a841949eb51432bbacb, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 657.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 388938153398864104, guid: f5420641f9b64a841949eb51432bbacb, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 376.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 388938153398864104, guid: f5420641f9b64a841949eb51432bbacb, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 388938153398864104, guid: f5420641f9b64a841949eb51432bbacb, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1683208721962750855, guid: f5420641f9b64a841949eb51432bbacb, type: 3}
+      propertyPath: m_text
+      value: Play
+      objectReference: {fileID: 0}
+    - target: {fileID: 1683208721962750855, guid: f5420641f9b64a841949eb51432bbacb, type: 3}
+      propertyPath: m_fontSize
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 1683208721962750855, guid: f5420641f9b64a841949eb51432bbacb, type: 3}
+      propertyPath: m_fontStyle
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1683208721962750855, guid: f5420641f9b64a841949eb51432bbacb, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 80
       objectReference: {fileID: 0}
     - target: {fileID: 8440900854214360450, guid: f5420641f9b64a841949eb51432bbacb, type: 3}
       propertyPath: m_Pivot.x
@@ -225,6 +261,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 8440900854214360450, guid: f5420641f9b64a841949eb51432bbacb, type: 3}
   m_PrefabInstance: {fileID: 79127300}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &79127302 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6127758083402094706, guid: f5420641f9b64a841949eb51432bbacb, type: 3}
+  m_PrefabInstance: {fileID: 79127300}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &205971018
 GameObject:
   m_ObjectHideFlags: 0

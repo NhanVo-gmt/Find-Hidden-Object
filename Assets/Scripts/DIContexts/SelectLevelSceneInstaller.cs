@@ -5,7 +5,7 @@ namespace DIContexts
     using UIFeatures.LoadingScene;
     using UserData.Controller;
 
-    public class MainSceneInstaller : BaseSceneInstaller
+    public class SelectLevelSceneInstaller : BaseSceneInstaller
     {
         public override void InstallBindings()
         {

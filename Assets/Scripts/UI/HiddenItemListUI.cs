@@ -10,8 +10,6 @@ public class HiddenItemListUI : MonoBehaviour
     
     private void Start()
     {
-        LevelManager.Instance.OnLoadCurrentLevel += LevelManager_OnLoadCurrentLevel;
-        
         Hide();
     }
 
@@ -21,13 +19,6 @@ public class HiddenItemListUI : MonoBehaviour
         {
             itemUI.gameObject.SetActive(false);    
         }
-    }
-
-    private void OnDestroy()
-    {
-        if (LevelManager.Instance == null) return;
-        
-        LevelManager.Instance.OnLoadCurrentLevel -= LevelManager_OnLoadCurrentLevel;
     }
 
     private void LevelManager_OnLoadCurrentLevel(LevelData levelData)

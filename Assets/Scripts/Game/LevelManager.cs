@@ -1,30 +1,27 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DataManager.MasterData;
+using DataManager.UserData;
 using UnityEngine;
+using UserData.Model;
 
-public class LevelManager : SingletonObject<LevelManager>
+namespace UserData.Controller
 {
-    [SerializeField] private LevelData currentLevel;
+    using Blueprints;
 
-    public Action<LevelData> OnLoadCurrentLevel;
-    
-    private void Start()
+    public class LevelManager : BaseDataManager<UserProfile>
     {
-        SceneLoader.Instance.OnSceneFinishLoading += SceneLoader_OnSceneFinishLoading;
+        #region Inject
+
+        private readonly LevelBlueprint levelBlueprint;
+
+        #endregion
+        
+        public LevelManager(MasterDataManager masterDataManager, LevelBlueprint levelBlueprint) : base(masterDataManager)
+        {
+            this.levelBlueprint = levelBlueprint;
+        }
     }
     
-    // Select level
-    // Save load
-    // Load scene
-    // Load level to scene
-    private void SceneLoader_OnSceneFinishLoading()
-    {
-        LoadCurrentLevel();
-    }
-    
-    public void LoadCurrentLevel()
-    {
-        OnLoadCurrentLevel?.Invoke(currentLevel); // todo remove
-    }
 }

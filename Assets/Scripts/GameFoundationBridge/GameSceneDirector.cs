@@ -19,7 +19,9 @@ namespace GameFoundationBridge
 
         #region shortcut
 
-        public UniTask LoadMainScene() { return this.LoadSingleSceneBySceneManagerAsync(SceneName.LevelSelectScene); }
+        public UniTask LoadLevelSelectScene() { return this.LoadSingleSceneBySceneManagerAsync(SceneName.LevelSelectScene); }
+        public UniTask LoadGameScene() { return this.LoadSingleSceneBySceneManagerAsync(SceneName.GameScene); }
+        
 
         #endregion
     }
