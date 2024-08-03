@@ -14,6 +14,7 @@ public class Item : MonoBehaviour
         GetComponent<SpriteRenderer>().sprite = sprite;
 
         DestroyImmediate(GetComponent<BoxCollider2D>());
-        gameObject.AddComponent<BoxCollider2D>();
+        BoxCollider2D col = gameObject.AddComponent<BoxCollider2D>();
+        col.isTrigger = true;
     }
 }

@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityEngine;
 
 [CustomEditor(typeof(LevelManager))]
-public class LevelManagerEditor : Editor
+public class LevelManagerEditor : UnityEditor.Editor
 {
     private LevelManager levelManager;
     
