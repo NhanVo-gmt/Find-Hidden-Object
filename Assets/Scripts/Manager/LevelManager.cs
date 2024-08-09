@@ -24,9 +24,37 @@ namespace UserData.Controller
             this.levelBlueprint = levelBlueprint;
         }
 
+        protected override void OnDataLoaded()
+        {
+            base.OnDataLoaded();
+
+            if (String.IsNullOrWhiteSpace(this.Data.CurrentLevelId))
+            {
+                LoadDefaultLevel();
+                return;
+            }
+        }
+
+        void LoadDefaultLevel()
+        {
+            this.Data.CurrentLevelId = levelBlueprint.FirstOrDefault().Value.Id;
+            
+            Debug.Log(this.Data.CurrentLevelId);
+        }
+
         public List<LevelRecord> GetAllLevels()
         {
             return levelBlueprint.Values.ToList();
+        }
+
+        public LevelRecord GetCurrentLevel()
+        {
+            return levelBlueprint[this.Data.CurrentLevelId];
+        }
+
+        public void SelectLevel(LevelRecord levelRecord)
+        {
+            this.Data.CurrentLevelId = levelRecord.Id;
         }
     }
     

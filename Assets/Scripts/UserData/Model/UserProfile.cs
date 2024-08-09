@@ -12,5 +12,8 @@ namespace UserData.Model
         public          string                        SelectedCharacterId { get; set; }
         public readonly Dictionary<string, Character> CharactersData = new();
 
+
+        public string CurrentLevelId { get; set; } = "";
+
     }
 }

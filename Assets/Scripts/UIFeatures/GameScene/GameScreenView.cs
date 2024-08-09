@@ -1,31 +1,56 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Blueprints;
 using Cysharp.Threading.Tasks;
 using GameFoundation.Scripts.UIModule.ScreenFlow.BaseScreen.Presenter;
 using GameFoundation.Scripts.UIModule.ScreenFlow.BaseScreen.View;
 using UnityEngine;
+using UnityEngine.UI;
+using UserData.Controller;
 using Zenject;
 
 public class GameScreenView : BaseView
 {
-    public GameHeaderView gameHeaderView;
-    public GameFooterView gameFooterView;
+    [Header("Header")]
+    public Button settingButton;
+
+    public Button backButton;
+
+    [Header("Footer")]
+    public GameFooterItemAdapter gameFooterItemAdapter;
 }
 
+[ScreenInfo(nameof(GameScreenView))]
 public class GameScreenPresenter : BaseScreenPresenter<GameScreenView>
 {
-    public GameScreenPresenter(SignalBus signalBus) : base(signalBus)
+    private readonly LevelManager levelManager;
+    private readonly DiContainer  diContainer;
+    
+    public GameScreenPresenter(SignalBus signalBus, LevelManager levelManager, DiContainer diContainer) : base(signalBus)
     {
+        this.levelManager = levelManager;
+        this.diContainer  = diContainer;
     }
     
-    public override UniTask BindData()
-    {
-        return UniTask.CompletedTask;    
-    }
-
     protected override void OnViewReady()
     {
         base.OnViewReady();
         this.OpenViewAsync().Forget();
+    }
+    
+    public override async UniTask BindData()
+    {
+        await PopulateLevelList();
+    }
+    
+    async Task PopulateLevelList()
+    {
+        List<LevelItemRecord> levelItems = this.levelManager.GetCurrentLevel().LevelItems;
+        await this.View.gameFooterItemAdapter.InitItemAdapter(levelItems.Select(record =>
+        {
+            return new GameFooterItemModel(record);
+        }).ToList(), this.diContainer);
     }
 }
