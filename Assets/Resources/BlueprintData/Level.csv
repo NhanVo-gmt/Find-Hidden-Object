@@ -1,2 +1,4 @@
-Id,IsUnlockedByDefault,ItemId,Number
-1,TRUE,Phone,5
+Id,IsUnlockedByDefault,Name,ItemId,Number
+1,TRUE,The Zoo,Phone,5
+2,FALSE,The Room,Phone,6
+3,FALSE,The Supermarket,Phone,7

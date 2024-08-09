@@ -1,5 +1,9 @@
 namespace UIFeatures.LoadingScene
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using Blueprints;
     using Cysharp.Threading.Tasks;
     using DataManager.MasterData;
     using DG.Tweening;
@@ -8,18 +12,24 @@ namespace UIFeatures.LoadingScene
     using GameFoundationBridge;
     using UnityEngine;
     using UnityEngine.UI;
+    using UserData.Controller;
     using Zenject;
+    
+    public class SelectLevelScreenView : BaseView
+    {
+        public SelectLevelItemAdapter selectLevelItemAdapter;
+    }
 
     [ScreenInfo(nameof(SelectLevelScreenView))]
     public class SelectLevelScreenPresenter : BaseScreenPresenter<SelectLevelScreenView>
     {
-        private readonly GameSceneDirector sceneDirector;
-        private readonly MasterDataManager masterDataManager;
+        private readonly LevelManager levelManager;
+        private readonly DiContainer  diContainer;
 
-        public SelectLevelScreenPresenter(SignalBus signalBus, GameSceneDirector sceneDirector, MasterDataManager masterDataManager) : base(signalBus)
+        public SelectLevelScreenPresenter(SignalBus signalBus, LevelManager levelManager, DiContainer diContainer) : base(signalBus)
         {
-            this.sceneDirector     = sceneDirector;
-            this.masterDataManager = masterDataManager;
+            this.levelManager = levelManager;
+            this.diContainer  = diContainer;
         }
 
         protected override void OnViewReady()
@@ -28,18 +38,18 @@ namespace UIFeatures.LoadingScene
             this.OpenViewAsync().Forget();
         }
 
-        public override UniTask BindData()
+        public override async UniTask BindData()
         {
-            this.View.playBtn.onClick.AddListener(() =>
-            {
-                this.sceneDirector.LoadGameScene();
-            });
-            return UniTask.CompletedTask;
+            await PopulateLevelList();
         }
-    }
 
-    public class SelectLevelScreenView : BaseView
-    {
-        public Button playBtn;
+        async Task PopulateLevelList()
+        {
+            List<LevelRecord> levelRecords = this.levelManager.GetAllLevels();
+            await this.View.selectLevelItemAdapter.InitItemAdapter(levelRecords.Select(record =>
+            {
+                return new SelectLevelItemModel(record);
+            }).ToList(), this.diContainer);
+        }
     }
 }

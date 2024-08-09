@@ -8,6 +8,7 @@ using UserData.Model;
 
 namespace UserData.Controller
 {
+    using System.Linq;
     using Blueprints;
 
     public class LevelManager : BaseDataManager<UserProfile>
@@ -21,6 +22,11 @@ namespace UserData.Controller
         public LevelManager(MasterDataManager masterDataManager, LevelBlueprint levelBlueprint) : base(masterDataManager)
         {
             this.levelBlueprint = levelBlueprint;
+        }
+
+        public List<LevelRecord> GetAllLevels()
+        {
+            return levelBlueprint.Values.ToList();
         }
     }
     

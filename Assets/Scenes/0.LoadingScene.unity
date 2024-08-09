@@ -326,6 +326,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 79948173881835292, guid: 7371e7fbfcacb584eb0ee5bc9d1939ac, type: 3}
+      propertyPath: m_ReferenceResolution.x
+      value: 1080
+      objectReference: {fileID: 0}
+    - target: {fileID: 79948173881835292, guid: 7371e7fbfcacb584eb0ee5bc9d1939ac, type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 1920
+      objectReference: {fileID: 0}
     - target: {fileID: 3055576614414293274, guid: 7371e7fbfcacb584eb0ee5bc9d1939ac, type: 3}
       propertyPath: m_Name
       value: GameRootUI

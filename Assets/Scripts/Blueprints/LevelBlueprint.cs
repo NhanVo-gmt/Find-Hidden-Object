@@ -6,6 +6,7 @@ namespace Blueprints
 {
     using DataManager.Blueprint.BlueprintReader;
 
+    [BlueprintReader("Level")]
     public class LevelBlueprint : GenericBlueprintReaderByRow<string, LevelRecord>
     {
         
@@ -14,8 +15,9 @@ namespace Blueprints
     [CsvHeaderKey("Id")]
     public class LevelRecord
     {
-        public string                    Id;
-        public bool                      IsUnlockedByDefault;
+        public string                          Id;
+        public bool                            IsUnlockedByDefault;
+        public string                          Name;
         public BlueprintByRow<LevelItemRecord> LevelItems;
     }
 
