@@ -38,8 +38,6 @@ namespace UserData.Controller
         void LoadDefaultLevel()
         {
             this.Data.CurrentLevelId = levelBlueprint.FirstOrDefault().Value.Id;
-            
-            Debug.Log(this.Data.CurrentLevelId);
         }
 
         public List<LevelRecord> GetAllLevels()
@@ -52,9 +50,13 @@ namespace UserData.Controller
             return levelBlueprint[this.Data.CurrentLevelId];
         }
 
+        public LevelLog GetCurrentLevelLog()
+        {
+            return this.Data.levelLogs[GetCurrentLevel().Id];
+        }
+
         public LevelRecord GetLevel(string Id)
         {
-            Debug.Log(levelBlueprint.Values.Count);
             return levelBlueprint[Id];
         }
 

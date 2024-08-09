@@ -47,14 +47,7 @@ public class GameScreenPresenter : BaseScreenPresenter<GameScreenView>
     
     async Task PopulateLevelList()
     {
-        // List<LevelItemRecord> levelItems = this.levelManager.GetCurrentLevel().LevelItems;
-        List<LevelItemRecord> levelItems = new();
-        levelItems.Add(new());
-        levelItems.Add(new());
-        levelItems.Add(new());
-        levelItems.Add(new());
-        levelItems.Add(new());
-        levelItems.Add(new());
+        List<LevelItemRecord> levelItems = this.levelManager.GetCurrentLevel().LevelItems;
         await this.View.gameFooterItemAdapter.InitItemAdapter(levelItems.Select(record =>
         {
             return new GameFooterItemModel(record);

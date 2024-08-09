@@ -1,19 +1,32 @@
 namespace UserData.Model
 {
     using System.Collections.Generic;
+    using Blueprints;
     using DataManager.LocalData;
     using DataManager.UserData;
+    using Newtonsoft.Json;
 
     public  class UserProfile : IUserData, ILocalData
     {
-        public string UserName { get; set; }
-        public string Avatar   { get; set; }
+        public string                       CurrentLevelId { get; set; } = "";
+        public Dictionary<string, LevelLog> levelLogs;
+        
+    }
+    
+    public class LevelLog
+    {
+        public string                            Id;
+        public Dictionary<string, List<LevelItemLog>> levelItemLogs;
+        
+        [JsonIgnore] public LevelRecord                      levelRecord;
+    }
 
-        public          string                        SelectedCharacterId { get; set; }
-        public readonly Dictionary<string, Character> CharactersData = new();
-
-
-        public string CurrentLevelId { get; set; } = "";
-
+    public class LevelItemLog
+    {
+        public string Id;
+        public int    Index;
+        public bool   HasPicked;
+        
+        [JsonIgnore] public LevelItemRecord levelItemRecord;
     }
 }
