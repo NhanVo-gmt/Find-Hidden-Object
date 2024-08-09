@@ -18,7 +18,12 @@ MonoBehaviour:
   m_GUID: e4b6a492b73e4c747b6bdde1279eb434
   m_SerializeEntries:
   - m_GUID: 70fe290833771c04094c3b1ed64f587d
-    m_Address: Level1Scene
+    m_Address: Level 1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 86e5681800b6caf44b204dbb3c98e485
+    m_Address: Level 2
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

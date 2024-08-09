@@ -52,6 +52,12 @@ namespace UserData.Controller
             return levelBlueprint[this.Data.CurrentLevelId];
         }
 
+        public LevelRecord GetLevel(string Id)
+        {
+            Debug.Log(levelBlueprint.Values.Count);
+            return levelBlueprint[Id];
+        }
+
         public void SelectLevel(LevelRecord levelRecord)
         {
             this.Data.CurrentLevelId = levelRecord.Id;
