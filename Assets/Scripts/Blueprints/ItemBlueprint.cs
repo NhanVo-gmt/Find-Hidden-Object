@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using DataManager.Blueprint.BlueprintReader;
 
-    [BlueprintReader("Items")]
+    [BlueprintReader("Item")]
     public class ItemBlueprint : GenericBlueprintReaderByRow<string, ItemRecord>
     {
     }

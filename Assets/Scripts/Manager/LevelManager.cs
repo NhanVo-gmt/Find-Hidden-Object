@@ -31,13 +31,73 @@ namespace UserData.Controller
             if (String.IsNullOrWhiteSpace(this.Data.CurrentLevelId))
             {
                 LoadDefaultLevel();
-                return;
+            }
+
+            if (this.Data.levelLogs == null)
+            {
+                CreateLevelLogSave();
+            }
+            else
+            {
+                LoadLevelLogSave();
             }
         }
 
         void LoadDefaultLevel()
         {
             this.Data.CurrentLevelId = levelBlueprint.FirstOrDefault().Value.Id;
+        }
+        
+        private void CreateLevelLogSave()
+        {
+            this.Data.levelLogs = new();
+            foreach (var level in GetAllLevels())
+            {
+                this.Data.levelLogs[level.Id] = new()
+                {
+                    Id = level.Id,
+                    LevelRecord =  level,
+                    LevelItemLogs = new(),
+                };
+
+                foreach (var levelItem in level.LevelItems.Values)
+                {
+                    List<LevelItemLog> itemLogs = new();
+                    for (int i = 0; i < levelItem.Number; i++)
+                    {
+                        LevelItemLog itemLog = new()
+                        {
+                            Id              = levelItem.ItemId,
+                            Index = i,
+                            HasPicked       = false,
+                            LevelItemRecord = levelItem
+                        };
+                        
+                        itemLogs.Add(itemLog);
+                    }
+                    
+                    this.Data.levelLogs[level.Id].LevelItemLogs.Add(levelItem.ItemId, itemLogs);
+                    Debug.Log($"Level {level.Id}: Create {levelItem.ItemId}");
+                }
+            }
+        }
+
+        private void LoadLevelLogSave()
+        {
+            foreach (var levelLog in this.Data.levelLogs.Values)
+            {
+                LevelRecord levelRecord = GetLevelRecord(levelLog.Id);
+                levelLog.LevelRecord = levelRecord;
+
+                foreach (var levelItemLogsKeyPair in levelLog.LevelItemLogs)
+                {
+                    LevelItemRecord levelItemRecord = levelRecord.LevelItems[levelItemLogsKeyPair.Key]; 
+                    foreach (var levelItemLog in levelItemLogsKeyPair.Value)
+                    {
+                        levelItemLog.LevelItemRecord = levelItemRecord;
+                    }
+                }
+            }
         }
 
         public List<LevelRecord> GetAllLevels()
@@ -55,7 +115,7 @@ namespace UserData.Controller
             return this.Data.levelLogs[GetCurrentLevel().Id];
         }
 
-        public LevelRecord GetLevel(string Id)
+        public LevelRecord GetLevelRecord(string Id)
         {
             return levelBlueprint[Id];
         }

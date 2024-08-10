@@ -18,7 +18,7 @@ namespace Blueprints
         public string                          Id;
         public bool                            IsUnlockedByDefault;
         public string                          Name;
-        public BlueprintByRow<LevelItemRecord> LevelItems;
+        public BlueprintByRow<string, LevelItemRecord> LevelItems;
     }
 
     [CsvHeaderKey("ItemId")]

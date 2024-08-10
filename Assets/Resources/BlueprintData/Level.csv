@@ -3,17 +3,11 @@ Id,IsUnlockedByDefault,Name,ItemId,Number
 ,,,Giraffe,1
 ,,,Elephant,1
 ,,,Horse,1
-,,,Tiger,1
 ,,,Lion,1
 ,,,Fish,1
 ,,,Turtle,1
-,,,Leopard ,1
+,,,Leopard,1
 ,,,Panda,1
 ,,,Bear,1
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
 2,FALSE,The Room,Phone,6
 3,FALSE,The Supermarket,Phone,7

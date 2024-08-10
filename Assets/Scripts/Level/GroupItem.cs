@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
@@ -22,7 +23,7 @@ public class GroupItem : MonoBehaviour
             if (!foundItem)
             {
                 Debug.LogError($"Can not find item with index: {i} in Group Item Id: {id}");
-                return;
+                continue;
             }
             
             foundItem.BindData(!itemLogs[i].HasPicked);
@@ -34,6 +35,9 @@ public class GroupItem : MonoBehaviour
     public void PopulateItem()
     {
         items.Clear();
+
+        id              = id.Trim();
+        gameObject.name = id;
         
         Item[] foundItems = GetComponentsInChildren<Item>();
         for (int i = 0; i < foundItems.Length; i++)

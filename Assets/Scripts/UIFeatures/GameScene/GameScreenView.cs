@@ -47,10 +47,10 @@ public class GameScreenPresenter : BaseScreenPresenter<GameScreenView>
     
     async Task PopulateLevelList()
     {
-        List<LevelItemRecord> levelItems = this.levelManager.GetCurrentLevel().LevelItems;
-        await this.View.gameFooterItemAdapter.InitItemAdapter(levelItems.Select(record =>
+        Dictionary<string, LevelItemRecord> levelItems = this.levelManager.GetCurrentLevel().LevelItems;
+        await this.View.gameFooterItemAdapter.InitItemAdapter(levelItems.Select(keyValuePair =>
         {
-            return new GameFooterItemModel(record);
+            return new GameFooterItemModel(keyValuePair.Value);
         }).ToList(), this.diContainer);
     }
 }

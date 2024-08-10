@@ -16,9 +16,9 @@ namespace UserData.Model
     public class LevelLog
     {
         public string                            Id;
-        public Dictionary<string, List<LevelItemLog>> levelItemLogs;
-        
-        [JsonIgnore] public LevelRecord                      levelRecord;
+        public Dictionary<string, List<LevelItemLog>> LevelItemLogs;
+
+        [JsonIgnore] public LevelRecord LevelRecord;
     }
 
     public class LevelItemLog
@@ -27,6 +27,6 @@ namespace UserData.Model
         public int    Index;
         public bool   HasPicked;
         
-        [JsonIgnore] public LevelItemRecord levelItemRecord;
+        [JsonIgnore] public LevelItemRecord LevelItemRecord;
     }
 }
