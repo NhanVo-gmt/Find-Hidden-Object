@@ -13,6 +13,8 @@ namespace DIContexts
         {
             base.InstallBindings();
             this.Container.InitScreenManually<GameScreenPresenter>();
+
+            this.Container.Bind<ItemManager>().AsSingle();
         }
     }
 }

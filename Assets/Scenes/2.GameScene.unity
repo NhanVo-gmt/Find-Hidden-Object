@@ -135,6 +135,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameScreenView
       objectReference: {fileID: 0}
+    - target: {fileID: 5025407747187937321, guid: fb553d7f5054903468b44a709835e8b7, type: 3}
+      propertyPath: _Params._Effects._InertiaDecelerationRate
+      value: 0.99
+      objectReference: {fileID: 0}
     - target: {fileID: 8440900854214360450, guid: fb553d7f5054903468b44a709835e8b7, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
