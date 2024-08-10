@@ -5,6 +5,7 @@ namespace DIContexts
     using GameFoundation.Scripts.UIModule.ScreenFlow.Managers;
     using GameFoundationBridge;
     using UnityEngine.EventSystems;
+    using UserData.Controller;
     using Zenject;
 
     public class GameProjectInstaller : MonoInstaller
@@ -23,6 +24,8 @@ namespace DIContexts
 
             //Common Event System
             this.Container.Bind<EventSystem>().FromComponentInNewPrefabResource(nameof(EventSystem)).AsSingle().NonLazy();
+
+            this.Container.Bind<LevelManager>().AsSingle();
         }
     }
 }

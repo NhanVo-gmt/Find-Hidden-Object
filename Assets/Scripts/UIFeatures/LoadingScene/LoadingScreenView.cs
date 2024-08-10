@@ -42,7 +42,7 @@ namespace UIFeatures.LoadingScene
                 this.masterDataManager.InitializeData()
             );
 
-            this.sceneDirector.LoadMainScene();
+            this.sceneDirector.LoadLevelSelectScene();
         }
 
         private async UniTask FakeLoading()
