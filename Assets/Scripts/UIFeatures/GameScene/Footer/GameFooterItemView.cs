@@ -48,6 +48,6 @@ public class GameFooterItemPresenter : BaseUIItemPresenter<GameFooterItemView, G
         
         Sprite sprite = await this.gameAssets.LoadAssetAsync<Sprite>(itemRecord.Sprite);
         this.View.image.sprite = sprite;
-        this.View.numText.text         = $"{0}/{model.levelItemRecord.Number}";
+        this.View.numText.text = $"{0}/{model.levelItemRecord.Number}";
     }
 }
