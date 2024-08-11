@@ -124,6 +124,16 @@ namespace UserData.Controller
         {
             this.Data.CurrentLevelId = levelRecord.Id;
         }
+
+        #region In Game
+
+        public void SelectItem(string id, int index)
+        {
+            LevelLog levelLog = this.Data.levelLogs[GetCurrentLevel().Id];
+            levelLog.LevelItemLogs[id][index].HasPicked = true;
+        }
+
+        #endregion
     }
     
 }

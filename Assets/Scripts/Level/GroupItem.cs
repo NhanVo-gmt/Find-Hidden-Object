@@ -43,7 +43,7 @@ public class GroupItem : MonoBehaviour
         for (int i = 0; i < foundItems.Length; i++)
         {
             items.Add(foundItems[i]);
-            foundItems[i].Init(i, sprite);
+            foundItems[i].Init(id, i, sprite);
         }
     }
 }
