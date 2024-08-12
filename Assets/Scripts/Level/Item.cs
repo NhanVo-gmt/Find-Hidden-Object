@@ -6,20 +6,28 @@ using UnityEngine.Serialization;
 
 public class Item : MonoBehaviour
 {
-    public int Index;
+    public string Id;
+    public int    Index;
 
     public Action OnClicked;
 
-    public void Init(int Index, Sprite sprite)
+    public void Init(string Id, int Index, Sprite sprite)
     {
+        this.Id    = Id;
         this.Index = Index;
+
+        gameObject.name = $"{Id} {Index}";
         
         SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.sprite = sprite;
 
-        Collider2D col = GetComponent<Collider2D>();
-        col.enabled = false;
-        col.enabled = true;
+        if (TryGetComponent<Collider2D>(out Collider2D col))
+        {
+            DestroyImmediate(col);
+        }
+
+        col           = gameObject.AddComponent<BoxCollider2D>();
+        col.isTrigger = true;
     }
 
     public void BindData(bool active)
@@ -29,8 +37,6 @@ public class Item : MonoBehaviour
 
     public void Click()
     {
-        OnClicked?.Invoke();
-        
         gameObject.SetActive(false);
     }
 }

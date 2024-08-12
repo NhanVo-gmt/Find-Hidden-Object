@@ -334,6 +334,10 @@ PrefabInstance:
       propertyPath: m_ReferenceResolution.y
       value: 1920
       objectReference: {fileID: 0}
+    - target: {fileID: 2241449984240862061, guid: 7371e7fbfcacb584eb0ee5bc9d1939ac, type: 3}
+      propertyPath: m_ClearFlags
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3055576614414293274, guid: 7371e7fbfcacb584eb0ee5bc9d1939ac, type: 3}
       propertyPath: m_Name
       value: GameRootUI

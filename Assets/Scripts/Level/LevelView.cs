@@ -26,13 +26,13 @@ public class LevelView : MonoBehaviour
         LevelLog currentLevel = levelManager.GetCurrentLevelLog();
         foreach (GroupItem groupItem in groupItems)
         {
-            if (!currentLevel.LevelItemLogs.TryGetValue(groupItem.Id, out List<LevelItemLog> levelItemLogs))
+            if (!currentLevel.LevelItemLogs.TryGetValue(groupItem.Id, out LevelItemLog levelItemLog))
             {
                 Debug.LogError($"Can't find {groupItem.Id} in Level Item Log");
                 return;
             }
             
-            groupItem.BindData(levelItemLogs);
+            groupItem.BindData(levelItemLog);
         }
     }
     

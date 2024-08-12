@@ -15,18 +15,11 @@ public class GroupItem : MonoBehaviour
     [SerializeField] private Sprite     sprite;
     
     
-    public void BindData(List<LevelItemLog> itemLogs)
+    public void BindData(LevelItemLog itemLog)
     {
-        for (int i = 0; i < itemLogs.Count; i++)
+        for (int i = 0; i < items.Count; i++)
         {
-            var foundItem = items.Find(x => x.Index == i);
-            if (!foundItem)
-            {
-                Debug.LogError($"Can not find item with index: {i} in Group Item Id: {id}");
-                continue;
-            }
-            
-            foundItem.BindData(!itemLogs[i].HasPicked);
+            items[i].BindData(!itemLog.PickedDict[i]);
         }
     }
 
@@ -43,7 +36,7 @@ public class GroupItem : MonoBehaviour
         for (int i = 0; i < foundItems.Length; i++)
         {
             items.Add(foundItems[i]);
-            foundItems[i].Init(i, sprite);
+            foundItems[i].Init(id, i, sprite);
         }
     }
 }

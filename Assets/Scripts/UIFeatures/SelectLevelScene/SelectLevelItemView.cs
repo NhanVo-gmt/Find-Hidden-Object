@@ -12,6 +12,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
+using UserData.Controller;
 using Zenject;
 
 public class SelectLevelItemModel
@@ -39,16 +40,18 @@ public class SelectLevelItemPresenter : BaseUIItemPresenter<SelectLevelItemView,
     private readonly ObjectPoolManager objectPoolManager;
     private readonly DiContainer       diContainer;
     private readonly GameSceneDirector gameSceneDirector;
+    private readonly LevelManager      levelManager;
 
     #endregion
 
     private SelectLevelItemModel  model;
     
-    public SelectLevelItemPresenter(IGameAssets gameAssets, ObjectPoolManager objectPoolManager, DiContainer diContainer, GameSceneDirector gameSceneDirector) : base(gameAssets)
+    public SelectLevelItemPresenter(IGameAssets gameAssets, ObjectPoolManager objectPoolManager, DiContainer diContainer, GameSceneDirector gameSceneDirector, LevelManager levelManager) : base(gameAssets)
     {
         this.objectPoolManager = objectPoolManager;
         this.diContainer       = diContainer;
         this.gameSceneDirector = gameSceneDirector;
+        this.levelManager      = levelManager;
     }
     
     public override void BindData(SelectLevelItemModel model)
@@ -58,6 +61,7 @@ public class SelectLevelItemPresenter : BaseUIItemPresenter<SelectLevelItemView,
         this.View.button.onClick.AddListener(async () =>
         {
             this.View.button.onClick.RemoveAllListeners();
+            levelManager.SelectLevel(this.model.levelRecord);
             await LoadSelectedLevelScene();
         });
         this.View.title.text = $"{model.levelRecord.Id}. {model.levelRecord.Name}";

@@ -5,9 +5,8 @@ Id,IsUnlockedByDefault,Name,ItemId,Number
 ,,,Horse,1
 ,,,Lion,1
 ,,,Fish,1
-,,,Turtle,1
+2,FALSE,The Room,Turtle,1
 ,,,Leopard,1
 ,,,Panda,1
 ,,,Bear,1
-2,FALSE,The Room,Phone,6
 3,FALSE,The Supermarket,Phone,7

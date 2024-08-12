@@ -62,21 +62,19 @@ namespace UserData.Controller
 
                 foreach (var levelItem in level.LevelItems.Values)
                 {
-                    List<LevelItemLog> itemLogs = new();
+                    LevelItemLog itemLog = new()
+                    {
+                        Id = levelItem.ItemId,
+                        Progress = 0,
+                        LevelItemRecord = levelItem,
+                        PickedDict = new()
+                    };
                     for (int i = 0; i < levelItem.Number; i++)
                     {
-                        LevelItemLog itemLog = new()
-                        {
-                            Id              = levelItem.ItemId,
-                            Index = i,
-                            HasPicked       = false,
-                            LevelItemRecord = levelItem
-                        };
-                        
-                        itemLogs.Add(itemLog);
+                        itemLog.PickedDict[i] = false;
                     }
                     
-                    this.Data.levelLogs[level.Id].LevelItemLogs.Add(levelItem.ItemId, itemLogs);
+                    this.Data.levelLogs[level.Id].LevelItemLogs.Add(levelItem.ItemId, itemLog);
                     Debug.Log($"Level {level.Id}: Create {levelItem.ItemId}");
                 }
             }
@@ -89,13 +87,10 @@ namespace UserData.Controller
                 LevelRecord levelRecord = GetLevelRecord(levelLog.Id);
                 levelLog.LevelRecord = levelRecord;
 
-                foreach (var levelItemLogsKeyPair in levelLog.LevelItemLogs)
+                foreach (var levelItemLog in levelLog.LevelItemLogs.Values)
                 {
-                    LevelItemRecord levelItemRecord = levelRecord.LevelItems[levelItemLogsKeyPair.Key]; 
-                    foreach (var levelItemLog in levelItemLogsKeyPair.Value)
-                    {
-                        levelItemLog.LevelItemRecord = levelItemRecord;
-                    }
+                    LevelItemRecord levelItemRecord = levelRecord.LevelItems[levelItemLog.Id];
+                    levelItemLog.LevelItemRecord = levelItemRecord;
                 }
             }
         }
@@ -124,6 +119,16 @@ namespace UserData.Controller
         {
             this.Data.CurrentLevelId = levelRecord.Id;
         }
+
+        #region In Game
+
+        public void SelectItem(string id, int index)
+        {
+            LevelLog levelLog = this.Data.levelLogs[GetCurrentLevel().Id];
+            levelLog.LevelItemLogs[id].SelectItem(index);
+        }
+
+        #endregion
     }
     
 }
