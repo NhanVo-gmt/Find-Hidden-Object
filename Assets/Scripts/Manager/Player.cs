@@ -39,7 +39,6 @@ public class Player : MonoBehaviour
                 
                 if (rayHit.transform != null && rayHit.transform.TryGetComponent<Item>(out Item item))
                 {
-                    Debug.LogError(123);
                     levelManager.SelectItem(item.Id, item.Index);
                     item.Click();
                 }
