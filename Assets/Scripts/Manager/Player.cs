@@ -14,6 +14,8 @@ public class Player : MonoBehaviour
 
     #endregion
     
+    [SerializeField]
+    
     
     private void Start()
     {
@@ -22,10 +24,10 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        GetInput();
+        GetTouchInput();
     }
 
-    void GetInput()
+    void GetTouchInput()
     {
         if (Input.touchCount > 0)
         {
@@ -37,6 +39,7 @@ public class Player : MonoBehaviour
                 
                 if (rayHit.transform != null && rayHit.transform.TryGetComponent<Item>(out Item item))
                 {
+                    Debug.LogError(123);
                     levelManager.SelectItem(item.Id, item.Index);
                     item.Click();
                 }

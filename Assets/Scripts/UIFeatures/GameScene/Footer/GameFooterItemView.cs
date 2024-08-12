@@ -10,14 +10,15 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
+using UserData.Model;
 
 public class GameFooterItemModel
 {
-    public readonly LevelItemRecord levelItemRecord;
+    public readonly LevelItemLog levelItemLog;
 
-    public GameFooterItemModel(LevelItemRecord levelItemRecord)
+    public GameFooterItemModel(LevelItemLog levelItemLog)
     {
-        this.levelItemRecord = levelItemRecord;
+        this.levelItemLog = levelItemLog;
     }
 }
 
@@ -35,6 +36,8 @@ public class GameFooterItemPresenter : BaseUIItemPresenter<GameFooterItemView, G
     private readonly ItemManager itemManager;
 
     #endregion
+
+    private GameFooterItemModel model;
     
     public GameFooterItemPresenter(IGameAssets gameAssets, ItemManager itemManager) : base(gameAssets)
     {
@@ -44,10 +47,27 @@ public class GameFooterItemPresenter : BaseUIItemPresenter<GameFooterItemView, G
     
     public override async void BindData(GameFooterItemModel model)
     {
-        ItemRecord itemRecord = itemManager.GetItemRecord(model.levelItemRecord.ItemId);
+        this.model = model;
+        
+        ItemRecord itemRecord = itemManager.GetItemRecord(model.levelItemLog.Id);
         
         Sprite sprite = await this.gameAssets.LoadAssetAsync<Sprite>(itemRecord.Sprite);
         this.View.image.sprite = sprite;
-        this.View.numText.text = $"{0}/{model.levelItemRecord.Number}";
+        
+        UpdateNumText(model.levelItemLog.Progress);
+
+        model.levelItemLog.OnUpdateProgress += UpdateNumText;
+    }
+
+    void UpdateNumText(int number)
+    {
+        this.View.numText.text = $"{number}/{model.levelItemLog.LevelItemRecord.Number}";
+    }
+
+    public override void Dispose()
+    {
+        base.Dispose();
+        
+        model.levelItemLog.OnUpdateProgress -= UpdateNumText;
     }
 }

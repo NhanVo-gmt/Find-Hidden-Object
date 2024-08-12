@@ -65,6 +65,7 @@ namespace UserData.Controller
                     LevelItemLog itemLog = new()
                     {
                         Id = levelItem.ItemId,
+                        Progress = 0,
                         LevelItemRecord = levelItem,
                         PickedDict = new()
                     };
@@ -124,7 +125,7 @@ namespace UserData.Controller
         public void SelectItem(string id, int index)
         {
             LevelLog levelLog = this.Data.levelLogs[GetCurrentLevel().Id];
-            levelLog.LevelItemLogs[id].PickedDict[index] = true;
+            levelLog.LevelItemLogs[id].SelectItem(index);
         }
 
         #endregion

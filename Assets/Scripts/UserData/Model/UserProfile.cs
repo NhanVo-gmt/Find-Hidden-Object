@@ -1,5 +1,6 @@
 namespace UserData.Model
 {
+    using System;
     using System.Collections.Generic;
     using Blueprints;
     using DataManager.LocalData;
@@ -24,8 +25,19 @@ namespace UserData.Model
     public class LevelItemLog
     {
         public string                Id;
+        public int                   Progress;
         public Dictionary<int, bool> PickedDict;
         
         [JsonIgnore] public LevelItemRecord LevelItemRecord;
+        [JsonIgnore] public Action<int>     OnUpdateProgress;
+
+        public void SelectItem(int index)
+        {
+            if (PickedDict[index]) return;
+            
+            Progress++;
+            PickedDict[index] = true;
+            OnUpdateProgress?.Invoke(Progress);
+        }
     }
 }

@@ -1,16 +1,14 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Blueprints;
 using Cysharp.Threading.Tasks;
 using GameFoundation.Scripts.UIModule.ScreenFlow.BaseScreen.Presenter;
 using GameFoundation.Scripts.UIModule.ScreenFlow.BaseScreen.View;
-using GameFoundation.Scripts.UIModule.ScreenFlow.Managers;
 using GameFoundationBridge;
 using UnityEngine;
 using UnityEngine.UI;
 using UserData.Controller;
+using UserData.Model;
 using Zenject;
 
 public class GameScreenView : BaseView
@@ -57,7 +55,7 @@ public class GameScreenPresenter : BaseScreenPresenter<GameScreenView>
     
     async Task PopulateLevelList()
     {
-        Dictionary<string, LevelItemRecord> levelItems = this.levelManager.GetCurrentLevel().LevelItems;
+        Dictionary<string, LevelItemLog> levelItems = this.levelManager.GetCurrentLevelLog().LevelItemLogs;
         await this.View.gameFooterItemAdapter.InitItemAdapter(levelItems.Select(keyValuePair =>
         {
             return new GameFooterItemModel(keyValuePair.Value);
