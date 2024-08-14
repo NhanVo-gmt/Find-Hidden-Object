@@ -10,6 +10,7 @@ namespace UIFeatures.LoadingScene
     using GameFoundation.Scripts.UIModule.ScreenFlow.BaseScreen.Presenter;
     using GameFoundation.Scripts.UIModule.ScreenFlow.BaseScreen.View;
     using GameFoundationBridge;
+    using TMPro;
     using UnityEngine;
     using UnityEngine.UI;
     using UserData.Controller;
@@ -17,19 +18,28 @@ namespace UIFeatures.LoadingScene
     
     public class SelectLevelScreenView : BaseView
     {
+        [Header("Header")]
+        public string currencyId;
+        public TextMeshProUGUI coinText;
+        public Button settingButton;
+        public Button shopButton;
+        
+        [Header("Body")]
         public SelectLevelItemAdapter selectLevelItemAdapter;
     }
 
     [ScreenInfo(nameof(SelectLevelScreenView))]
     public class SelectLevelScreenPresenter : BaseScreenPresenter<SelectLevelScreenView>
     {
-        private readonly LevelManager levelManager;
-        private readonly DiContainer  diContainer;
+        private readonly LevelManager    levelManager;
+        private readonly CurrencyManager currencyManager;
+        private readonly DiContainer     diContainer;
 
-        public SelectLevelScreenPresenter(SignalBus signalBus, LevelManager levelManager, DiContainer diContainer) : base(signalBus)
+        public SelectLevelScreenPresenter(SignalBus signalBus, LevelManager levelManager, CurrencyManager currencyManager, DiContainer diContainer) : base(signalBus)
         {
-            this.levelManager = levelManager;
-            this.diContainer  = diContainer;
+            this.levelManager    = levelManager;
+            this.currencyManager = currencyManager;
+            this.diContainer     = diContainer;
         }
 
         protected override void OnViewReady()
@@ -40,7 +50,14 @@ namespace UIFeatures.LoadingScene
 
         public override async UniTask BindData()
         {
+            SetCoinText();
+            
             await PopulateLevelList();
+        }
+
+        void SetCoinText()
+        {
+            this.View.coinText.text = this.currencyManager.GetCurrencyLogById(this.View.currencyId).CurrencyNumber.ToString();
         }
 
         async Task PopulateLevelList()

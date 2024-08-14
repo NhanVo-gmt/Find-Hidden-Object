@@ -25,6 +25,7 @@ namespace DIContexts
             //Common Event System
             this.Container.Bind<EventSystem>().FromComponentInNewPrefabResource(nameof(EventSystem)).AsSingle().NonLazy();
 
+            this.Container.Bind<CurrencyManager>().AsSingle();
             this.Container.Bind<LevelManager>().AsSingle();
         }
     }

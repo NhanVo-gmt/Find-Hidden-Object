@@ -11,7 +11,6 @@ namespace UserData.Model
     {
         public string                       CurrentLevelId { get; set; } = "";
         public Dictionary<string, LevelLog> levelLogs;
-        
     }
     
     public class LevelLog

@@ -69,7 +69,7 @@ namespace UserData.Controller
                         LevelItemRecord = levelItem,
                         PickedDict = new()
                     };
-                    for (int i = 0; i < levelItem.Number; i++)
+                    for (int i = 0; i < levelItem.ItemNumber; i++)
                     {
                         itemLog.PickedDict[i] = false;
                     }
