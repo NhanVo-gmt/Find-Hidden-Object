@@ -57,7 +57,8 @@ namespace UIFeatures.LoadingScene
 
         void SetCoinText()
         {
-            this.View.coinText.text = this.currencyManager.GetCurrencyLogById(this.View.currencyId).CurrencyNumber.ToString();
+            this.View.coinText.text =
+                this.currencyManager.GetCurrencyLogById(this.View.currencyId).CurrencyNumber.ToString();
         }
 
         async Task PopulateLevelList()

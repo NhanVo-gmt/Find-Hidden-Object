@@ -41,6 +41,8 @@ namespace UserData.Controller
             {
                 LoadLevelLogSave();
             }
+            
+            this.Data.RegisterEvent();
         }
 
         void LoadDefaultLevel()
@@ -57,6 +59,7 @@ namespace UserData.Controller
                 {
                     Id = level.Id,
                     LevelRecord =  level,
+                    IsCompleted = false,
                     LevelItemLogs = new(),
                 };
 
