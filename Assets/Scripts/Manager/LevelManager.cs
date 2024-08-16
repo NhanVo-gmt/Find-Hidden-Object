@@ -16,15 +16,17 @@ namespace UserData.Controller
     {
         #region Inject
 
-        private readonly LevelBlueprint levelBlueprint;
-        private readonly ScreenManager  screenManager;
+        private readonly LevelBlueprint  levelBlueprint;
+        private readonly ScreenManager   screenManager;
+        private readonly CurrencyManager currencyManager;
 
         #endregion
         
-        public LevelManager(MasterDataManager masterDataManager, LevelBlueprint levelBlueprint, ScreenManager screenManager) : base(masterDataManager)
+        public LevelManager(MasterDataManager masterDataManager, LevelBlueprint levelBlueprint, ScreenManager screenManager, CurrencyManager currencyManager) : base(masterDataManager)
         {
-            this.levelBlueprint = levelBlueprint;
-            this.screenManager  = screenManager;
+            this.levelBlueprint  = levelBlueprint;
+            this.screenManager   = screenManager;
+            this.currencyManager = currencyManager;
         }
 
         protected override void OnDataLoaded()
@@ -143,9 +145,12 @@ namespace UserData.Controller
                 .Values.ToList());
         }
 
-        public void ClaimReward()
+        public void ClaimReward(List<LevelRewardRecord> levelRewardRecords)
         {
-            
+            foreach (var levelRewardRecord in levelRewardRecords)
+            {
+                this.currencyManager.AddCurrency(levelRewardRecord.RewardId, levelRewardRecord.RewardNumber);
+            }
         }
 
         #endregion

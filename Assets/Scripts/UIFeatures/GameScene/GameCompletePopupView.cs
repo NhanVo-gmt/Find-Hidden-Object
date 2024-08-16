@@ -51,7 +51,7 @@ public class GameCompletePopupPresenter : BasePopupPresenter<GameCompletePopupVi
         this.View.claimBtn.onClick.AddListener(() =>
         {
             this.View.claimBtn.onClick.RemoveAllListeners();
-            this.levelManager.ClaimReward();
+            this.levelManager.ClaimReward(model);
             this.CloseView();
 
         });

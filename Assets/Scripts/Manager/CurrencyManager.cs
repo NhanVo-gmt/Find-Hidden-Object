@@ -80,6 +80,16 @@ namespace UserData.Controller
         {
             return this.Data.WalletLogs[id];
         }
+
+        #region Add Currency To Wallet
+
+        public void AddCurrency(string id, int number)
+        {
+            this.Data.WalletLogs[id].CurrencyNumber += number;
+            Debug.Log($"{this.Data.WalletLogs[id].CurrencyId}: {this.Data.WalletLogs[id].CurrencyNumber}");
+        }
+
+        #endregion
     }
 
 }
