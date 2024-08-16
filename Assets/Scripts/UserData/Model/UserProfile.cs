@@ -26,7 +26,7 @@ namespace UserData.Model
         public string                           Id;
         public Dictionary<string, LevelItemLog> LevelItemLogs;
         public int                              Progress;
-        public bool                             IsCompleted;
+        public State                            State;
 
         [JsonIgnore] public LevelRecord LevelRecord;
         [JsonIgnore] public Action      OnCompleted;
@@ -44,7 +44,7 @@ namespace UserData.Model
             Progress++;
             if (Progress == LevelItemLogs.Count)
             {
-                IsCompleted = true;
+                this.State = State.Complete;
                 OnCompleted?.Invoke();
             }
         }
@@ -73,5 +73,12 @@ namespace UserData.Model
                 OnCompleted?.Invoke();
             }
         }
+    }
+
+    public enum State
+    {
+        Active,
+        Complete,
+        Reward,
     }
 }

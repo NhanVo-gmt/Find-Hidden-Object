@@ -62,9 +62,9 @@ namespace UserData.Controller
             {
                 this.Data.levelLogs[level.Id] = new()
                 {
-                    Id = level.Id,
-                    LevelRecord =  level,
-                    IsCompleted = false,
+                    Id            = level.Id,
+                    LevelRecord   =  level,
+                    State         = State.Active,
                     LevelItemLogs = new(),
                 };
 
@@ -141,13 +141,12 @@ namespace UserData.Controller
 
         public void ShowCompletedScreen()
         {
-            this.screenManager.OpenScreen<GameCompletePopupPresenter, List<LevelRewardRecord>>(GetCurrentLevel().LevelRewards
-                .Values.ToList());
+            this.screenManager.OpenScreen<GameCompletePopupPresenter, LevelRecord>(GetCurrentLevel());
         }
 
-        public void ClaimReward(List<LevelRewardRecord> levelRewardRecords)
+        public void ClaimReward(LevelRecord levelRecord)
         {
-            foreach (var levelRewardRecord in levelRewardRecords)
+            foreach (var levelRewardRecord in levelRecord.LevelRewards.Values)
             {
                 this.currencyManager.AddCurrency(levelRewardRecord.RewardId, levelRewardRecord.RewardNumber);
             }

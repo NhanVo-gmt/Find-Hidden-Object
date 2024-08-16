@@ -24,8 +24,8 @@ public class GameRewardItemView : MonoBehaviour
     public async UniTask BindData(LevelRewardRecord model)
     {
         CurrencyRecord currencyRecord = currencyManager.GetCurrencyById(model.RewardId);
-        rewardImg.sprite = await gameAssets.LoadAssetAsync<Sprite>(currencyRecord.Icon);
         rewardText.text  = model.RewardNumber.ToString();
+        rewardImg.sprite = await gameAssets.LoadAssetAsync<Sprite>(currencyRecord.Icon);
     }
 }
 
