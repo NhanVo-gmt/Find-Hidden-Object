@@ -665,6 +665,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2429661719724764568, guid: 2ac9e8bcd6358e54cafb9b6a829f2648, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3974132418041726370, guid: 2ac9e8bcd6358e54cafb9b6a829f2648, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3974132418041726370, guid: 2ac9e8bcd6358e54cafb9b6a829f2648, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3974132418041726370, guid: 2ac9e8bcd6358e54cafb9b6a829f2648, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 768
+      objectReference: {fileID: 0}
+    - target: {fileID: 3974132418041726370, guid: 2ac9e8bcd6358e54cafb9b6a829f2648, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -110
+      objectReference: {fileID: 0}
     - target: {fileID: 6271562199440968946, guid: 2ac9e8bcd6358e54cafb9b6a829f2648, type: 3}
       propertyPath: m_Name
       value: GameCompletePopupView

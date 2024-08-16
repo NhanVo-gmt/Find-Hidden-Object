@@ -8,6 +8,7 @@ using GameFoundation.Scripts.UIModule.MVP;
 using GameFoundation.Scripts.UIModule.ScreenFlow.BaseScreen.Presenter;
 using GameFoundation.Scripts.UIModule.ScreenFlow.BaseScreen.View;
 using GameFoundation.Scripts.Utilities.LogService;
+using GameFoundation.Scripts.Utilities.ObjectPool;
 using GameFoundationBridge;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,8 +17,9 @@ using Zenject;
 
 public class GameCompletePopupView : BaseView
 {
-    public GameRewardItemAdapter gameRewardItemAdapter;
-    public Button                claimBtn;
+    public Transform          gameRewardContent;
+    public GameRewardItemView gameRewardItemPrefab;
+    public Button             claimBtn;
 }
 
 [PopupInfo(nameof(GameCompletePopupView), true, false)]
@@ -27,17 +29,18 @@ public class GameCompletePopupPresenter : BasePopupPresenter<GameCompletePopupVi
 
     private readonly DiContainer       diContainer;
     private readonly LevelManager      levelManager;
-    private readonly GameSceneDirector gameSceneDirector;
+    private readonly ObjectPoolManager objectPoolManager;
 
     #endregion
     
-    private List<LevelRewardRecord> model;
+    private List<LevelRewardRecord>  model;
+    private List<GameRewardItemView> rewardItemViews;
     
-    public GameCompletePopupPresenter(SignalBus signalBus, ILogService logService, DiContainer diContainer, LevelManager levelManager, GameSceneDirector gameSceneDirector) : base(signalBus, logService)
+    public GameCompletePopupPresenter(SignalBus signalBus, ILogService logService, DiContainer diContainer, LevelManager levelManager, ObjectPoolManager objectPoolManager) : base(signalBus, logService)
     {
         this.diContainer       = diContainer;
         this.levelManager      = levelManager;
-        this.gameSceneDirector = gameSceneDirector;
+        this.objectPoolManager = objectPoolManager;
     }
     
     public override async UniTask BindData(List<LevelRewardRecord> model)
@@ -51,15 +54,23 @@ public class GameCompletePopupPresenter : BasePopupPresenter<GameCompletePopupVi
             this.levelManager.ClaimReward();
             this.CloseView();
 
-            this.gameSceneDirector.LoadLevelSelectScene();
         });
     }
 
     async UniTask PopulateRewardList()
     {
-        await this.View.gameRewardItemAdapter.InitItemAdapter(model.Select(levelRewardRecord =>
+        this.rewardItemViews = this.model.Select(record =>
         {
-            return new GameRewardItemModel(levelRewardRecord);
-        }).ToList(), this.diContainer);
+            var instance = this.objectPoolManager.Spawn(this.View.gameRewardItemPrefab, this.View.gameRewardContent);
+            var position = instance.transform.localPosition;
+            position.z                       = 0;
+            instance.transform.localPosition = position;
+            instance.transform.localScale    = Vector3.one;
+            var view = instance.GetComponent<GameRewardItemView>();
+            this.diContainer.Inject(view);
+            view.BindData(record).Forget();
+            instance.gameObject.SetActive(true);
+            return view;
+        }).ToList();
     }
 }
