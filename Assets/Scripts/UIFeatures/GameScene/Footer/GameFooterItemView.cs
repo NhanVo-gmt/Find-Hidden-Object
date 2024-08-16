@@ -61,7 +61,7 @@ public class GameFooterItemPresenter : BaseUIItemPresenter<GameFooterItemView, G
 
     void UpdateNumText(int number)
     {
-        this.View.numText.text = $"{number}/{model.levelItemLog.LevelItemRecord.Number}";
+        this.View.numText.text = $"{number}/{model.levelItemLog.LevelItemRecord.ItemNumber}";
     }
 
     public override void Dispose()

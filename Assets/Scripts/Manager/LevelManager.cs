@@ -10,18 +10,23 @@ namespace UserData.Controller
 {
     using System.Linq;
     using Blueprints;
+    using GameFoundation.Scripts.UIModule.ScreenFlow.Managers;
 
     public class LevelManager : BaseDataManager<UserProfile>
     {
         #region Inject
 
-        private readonly LevelBlueprint levelBlueprint;
+        private readonly LevelBlueprint  levelBlueprint;
+        private readonly ScreenManager   screenManager;
+        private readonly CurrencyManager currencyManager;
 
         #endregion
         
-        public LevelManager(MasterDataManager masterDataManager, LevelBlueprint levelBlueprint) : base(masterDataManager)
+        public LevelManager(MasterDataManager masterDataManager, LevelBlueprint levelBlueprint, ScreenManager screenManager, CurrencyManager currencyManager) : base(masterDataManager)
         {
-            this.levelBlueprint = levelBlueprint;
+            this.levelBlueprint  = levelBlueprint;
+            this.screenManager   = screenManager;
+            this.currencyManager = currencyManager;
         }
 
         protected override void OnDataLoaded()
@@ -41,6 +46,8 @@ namespace UserData.Controller
             {
                 LoadLevelLogSave();
             }
+            
+            this.Data.RegisterEvent();
         }
 
         void LoadDefaultLevel()
@@ -55,8 +62,9 @@ namespace UserData.Controller
             {
                 this.Data.levelLogs[level.Id] = new()
                 {
-                    Id = level.Id,
-                    LevelRecord =  level,
+                    Id            = level.Id,
+                    LevelRecord   =  level,
+                    State         = State.Active,
                     LevelItemLogs = new(),
                 };
 
@@ -69,7 +77,7 @@ namespace UserData.Controller
                         LevelItemRecord = levelItem,
                         PickedDict = new()
                     };
-                    for (int i = 0; i < levelItem.Number; i++)
+                    for (int i = 0; i < levelItem.ItemNumber; i++)
                     {
                         itemLog.PickedDict[i] = false;
                     }
@@ -115,17 +123,33 @@ namespace UserData.Controller
             return levelBlueprint[Id];
         }
 
+        #region In Game
+        
         public void SelectLevel(LevelRecord levelRecord)
         {
-            this.Data.CurrentLevelId = levelRecord.Id;
+            GetCurrentLevelLog().OnCompleted -= ShowCompletedScreen;
+                
+            this.Data.CurrentLevelId         =  levelRecord.Id;
+            GetCurrentLevelLog().OnCompleted += ShowCompletedScreen;
         }
-
-        #region In Game
 
         public void SelectItem(string id, int index)
         {
             LevelLog levelLog = this.Data.levelLogs[GetCurrentLevel().Id];
             levelLog.LevelItemLogs[id].SelectItem(index);
+        }
+
+        public void ShowCompletedScreen()
+        {
+            this.screenManager.OpenScreen<GameCompletePopupPresenter, LevelRecord>(GetCurrentLevel());
+        }
+
+        public void ClaimReward(LevelRecord levelRecord)
+        {
+            foreach (var levelRewardRecord in levelRecord.LevelRewards.Values)
+            {
+                this.currencyManager.AddCurrency(levelRewardRecord.RewardId, levelRewardRecord.RewardNumber);
+            }
         }
 
         #endregion
