@@ -10,18 +10,21 @@ namespace UserData.Controller
 {
     using System.Linq;
     using Blueprints;
+    using GameFoundation.Scripts.UIModule.ScreenFlow.Managers;
 
     public class LevelManager : BaseDataManager<UserProfile>
     {
         #region Inject
 
         private readonly LevelBlueprint levelBlueprint;
+        private readonly ScreenManager  screenManager;
 
         #endregion
         
-        public LevelManager(MasterDataManager masterDataManager, LevelBlueprint levelBlueprint) : base(masterDataManager)
+        public LevelManager(MasterDataManager masterDataManager, LevelBlueprint levelBlueprint, ScreenManager screenManager) : base(masterDataManager)
         {
             this.levelBlueprint = levelBlueprint;
+            this.screenManager  = screenManager;
         }
 
         protected override void OnDataLoaded()
@@ -118,17 +121,31 @@ namespace UserData.Controller
             return levelBlueprint[Id];
         }
 
+        #region In Game
+        
         public void SelectLevel(LevelRecord levelRecord)
         {
-            this.Data.CurrentLevelId = levelRecord.Id;
+            GetCurrentLevelLog().OnCompleted -= ShowCompletedScreen;
+                
+            this.Data.CurrentLevelId         =  levelRecord.Id;
+            GetCurrentLevelLog().OnCompleted += ShowCompletedScreen;
         }
-
-        #region In Game
 
         public void SelectItem(string id, int index)
         {
             LevelLog levelLog = this.Data.levelLogs[GetCurrentLevel().Id];
             levelLog.LevelItemLogs[id].SelectItem(index);
+        }
+
+        public void ShowCompletedScreen()
+        {
+            this.screenManager.OpenScreen<GameCompletePopupPresenter, List<LevelRewardRecord>>(GetCurrentLevel().LevelRewards
+                .Values.ToList());
+        }
+
+        public void ClaimReward()
+        {
+            
         }
 
         #endregion

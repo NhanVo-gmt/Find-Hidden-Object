@@ -29,6 +29,7 @@ namespace UserData.Model
         public bool                             IsCompleted;
 
         [JsonIgnore] public LevelRecord LevelRecord;
+        [JsonIgnore] public Action      OnCompleted;
 
         public void RegisterEvent()
         {
@@ -44,6 +45,7 @@ namespace UserData.Model
             if (Progress == LevelItemLogs.Count)
             {
                 IsCompleted = true;
+                OnCompleted?.Invoke();
             }
         }
     }
