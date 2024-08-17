@@ -21,6 +21,8 @@ namespace UserData.Controller
         private readonly CurrencyManager currencyManager;
 
         #endregion
+
+        public Action OnUseHint;
         
         public LevelManager(MasterDataManager masterDataManager, LevelBlueprint levelBlueprint, ScreenManager screenManager, CurrencyManager currencyManager) : base(masterDataManager)
         {
@@ -150,6 +152,11 @@ namespace UserData.Controller
             {
                 this.currencyManager.AddCurrency(levelRewardRecord.RewardId, levelRewardRecord.RewardNumber);
             }
+        }
+
+        public void UseHint()
+        {
+            OnUseHint?.Invoke();
         }
 
         #endregion

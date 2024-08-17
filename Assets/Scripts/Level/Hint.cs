@@ -25,6 +25,7 @@ public class Hint : MonoBehaviour
     public void ChooseRandomTarget()
     {
         Item[] items = GameObject.FindObjectsOfType<Item>(false);
+        
         SetTarget(items[Random.Range(0, items.Length)]);
     }
     
