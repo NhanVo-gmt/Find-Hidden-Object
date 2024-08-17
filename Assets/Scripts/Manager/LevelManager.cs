@@ -156,8 +156,14 @@ namespace UserData.Controller
 
         public void UseHint()
         {
-            if (GetCurrentLevelLog().State == State.Active && currencyManager.UseCurrencyLog(CurrencyManager.HINT, 1))
+            if (GetCurrentLevelLog().State == State.Active)
             {
+                if (!currencyManager.UseCurrencyLog(CurrencyManager.HINT, 1))
+                {
+                    currencyManager.AddCurrency(CurrencyManager.HINT, 1);
+                    //TODO watch ads
+                    return;
+                }
                 OnUseHint?.Invoke();
             }
         }

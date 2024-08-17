@@ -87,7 +87,7 @@ namespace UserData.Controller
         {
             if (this.Data.WalletLogs[id].CurrencyNumber < number) return false;
 
-            this.Data.WalletLogs[id].CurrencyNumber -= number;
+            this.Data.WalletLogs[id].UseCurrencyNumber(number);
             return true;
         }
 
@@ -95,8 +95,7 @@ namespace UserData.Controller
 
         public void AddCurrency(string id, int number)
         {
-            this.Data.WalletLogs[id].CurrencyNumber += number;
-            Debug.Log($"{this.Data.WalletLogs[id].CurrencyId}: {this.Data.WalletLogs[id].CurrencyNumber}");
+            this.Data.WalletLogs[id].AddCurrencyNumber(number);
         }
 
         #endregion

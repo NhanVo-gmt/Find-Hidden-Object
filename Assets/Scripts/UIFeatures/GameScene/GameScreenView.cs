@@ -36,6 +36,8 @@ public class GameScreenPresenter : BaseScreenPresenter<GameScreenView>
     private readonly GameSceneDirector gameSceneDirector;
 
     #endregion
+
+    private WalletLog walletLog;
     
     public GameScreenPresenter(SignalBus signalBus, LevelManager levelManager, CurrencyManager currencyManager, DiContainer diContainer, GameSceneDirector gameSceneDirector) : base(signalBus)
     {
@@ -56,8 +58,17 @@ public class GameScreenPresenter : BaseScreenPresenter<GameScreenView>
         this.View.backButton.onClick.AddListener(GoBackToLevelScreen);
         this.View.hintButton.onClick.AddListener(levelManager.UseHint);
 
-        this.View.hintText.text = currencyManager.GetCurrencyLogById(CurrencyManager.HINT).CurrencyNumber.ToString();
+        this.walletLog = currencyManager.GetCurrencyLogById(CurrencyManager.HINT);
+        UpdateHintUI(this.walletLog.CurrencyNumber);
+
+        this.walletLog.OnChangedValue += UpdateHintUI;
+        
         await PopulateLevelList();
+    }
+
+    void UpdateHintUI(int number)
+    {
+        this.View.hintText.text = number.ToString();
     }
 
     void GoBackToLevelScreen()
@@ -77,6 +88,9 @@ public class GameScreenPresenter : BaseScreenPresenter<GameScreenView>
     public override void Dispose()
     {
         base.Dispose();
+        
+        this.walletLog.OnChangedValue -= UpdateHintUI;
+        
         this.View.settingButton.onClick.RemoveAllListeners();
         this.View.backButton.onClick.RemoveAllListeners();
         this.View.hintButton.onClick.RemoveAllListeners();
