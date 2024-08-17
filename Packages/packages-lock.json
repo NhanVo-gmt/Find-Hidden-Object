@@ -7,6 +7,13 @@
       "dependencies": {},
       "hash": "f057abff0f4ea52e4c9699c2831808d6c0a27bcc"
     },
+    "com.gdk.3rd": {
+      "version": "https://github.com/GameDevelopmentKit/ThirdPartyServices.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "8d6bd768b4120ee1382a04682361026226362160"
+    },
     "com.gdk.core": {
       "version": "file:com.gdk.core",
       "depth": 0,
