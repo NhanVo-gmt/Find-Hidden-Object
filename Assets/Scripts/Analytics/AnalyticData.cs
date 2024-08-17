@@ -7,13 +7,18 @@ namespace Analytic
 
     public class AnalyticData : ILocalData, IUserData
     {
+        public int    CurrentStepId;
+        public bool   IsFirstSession        = false;
         public bool   IsFirstLevelCompleted = false;
         public bool   IsFirstAdsLoaded      = false;
         public int    SessionCount;
         public double UserPlayTime;
+        public int    LevelCompleted;
         public int    AdsWatchCount;
-        public double CoinCollected;
+        public int    CoinCollected;
         public double HintCollected;
+
+        public int GetNextStepId() { return CurrentStepId++; }
     }
     
 }

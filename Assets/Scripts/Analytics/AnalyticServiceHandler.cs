@@ -24,7 +24,16 @@ namespace Analytic
             this.analyticServices = analyticServices;
             this.signalBus        = signalBus;
         }
-        
+
+        protected override void OnDataLoaded()
+        {
+            base.OnDataLoaded();
+            if (!this.Data.IsFirstSession) return;
+
+            this.Data.IsFirstSession = true;
+            this.analyticServices.Track(this.CreateCommonEvent<FirstGameStart>());
+        }
+
         public void Initialize()
         {
             this.analyticServices.Start();
@@ -35,10 +44,25 @@ namespace Analytic
         {
             
         }
+
+        public T CreateCommonEvent<T>() where T : BaseEvent, new()
+        {
+            var baseEvent = new T();
+            baseEvent.StepId         = this.Data.GetNextStepId();
+            baseEvent.LevelCompleted = this.Data.LevelCompleted;
+            baseEvent.SessionCount   = this.Data.SessionCount;
+            baseEvent.UserPlayTime   = this.Data.UserPlayTime;
+            baseEvent.CoinCollected  = this.Data.CoinCollected;
+            baseEvent.AdCount        = this.Data.AdsWatchCount;
+
+            return baseEvent;
+        }
         
         public void Tick()
         {
-            
+            if (this.Data == null) return;
+
+            this.Data.UserPlayTime += Time.deltaTime;
         }
         
         public void Dispose()
