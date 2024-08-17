@@ -21,6 +21,8 @@ namespace UserData.Controller
         private readonly CurrencyManager currencyManager;
 
         #endregion
+
+        public Action OnUseHint;
         
         public LevelManager(MasterDataManager masterDataManager, LevelBlueprint levelBlueprint, ScreenManager screenManager, CurrencyManager currencyManager) : base(masterDataManager)
         {
@@ -149,6 +151,20 @@ namespace UserData.Controller
             foreach (var levelRewardRecord in levelRecord.LevelRewards.Values)
             {
                 this.currencyManager.AddCurrency(levelRewardRecord.RewardId, levelRewardRecord.RewardNumber);
+            }
+        }
+
+        public void UseHint()
+        {
+            if (GetCurrentLevelLog().State == State.Active)
+            {
+                if (!currencyManager.UseCurrencyLog(CurrencyManager.HINT, 1))
+                {
+                    currencyManager.AddCurrency(CurrencyManager.HINT, 1);
+                    //TODO watch ads
+                    return;
+                }
+                OnUseHint?.Invoke();
             }
         }
 

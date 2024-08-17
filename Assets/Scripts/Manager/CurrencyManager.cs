@@ -15,6 +15,8 @@ namespace UserData.Controller
         private readonly CurrencyBlueprint currencyBlueprint;
 
         #endregion
+
+        public const string HINT = "Hint";
         
         public CurrencyManager(MasterDataManager masterDataManager, CurrencyBlueprint currencyBlueprint) : base(masterDataManager)
         {
@@ -81,12 +83,19 @@ namespace UserData.Controller
             return this.Data.WalletLogs[id];
         }
 
+        public bool UseCurrencyLog(string id, int number)
+        {
+            if (this.Data.WalletLogs[id].CurrencyNumber < number) return false;
+
+            this.Data.WalletLogs[id].UseCurrencyNumber(number);
+            return true;
+        }
+
         #region Add Currency To Wallet
 
         public void AddCurrency(string id, int number)
         {
-            this.Data.WalletLogs[id].CurrencyNumber += number;
-            Debug.Log($"{this.Data.WalletLogs[id].CurrencyId}: {this.Data.WalletLogs[id].CurrencyNumber}");
+            this.Data.WalletLogs[id].AddCurrencyNumber(number);
         }
 
         #endregion

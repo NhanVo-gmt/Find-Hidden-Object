@@ -4,22 +4,34 @@ using System.Collections.Generic;
 using GameFoundation.Scripts.Utilities.Extension;
 using UnityEngine;
 using UserData.Controller;
+using UserData.Model;
 using Zenject;
 
 public class Player : MonoBehaviour
 {
     #region Inject
 
-    [Inject] private LevelManager levelManager;
+    [Inject] private LevelManager    levelManager;
+    [Inject] private CurrencyManager currencyManager;
 
     #endregion
-    
-    [SerializeField]
+
+    [SerializeField] private Hint hint;
     
     
     private void Start()
     {
         this.GetCurrentContainer().Inject(this);
+    }
+
+    private void OnEnable()
+    {
+        levelManager.OnUseHint += UseHint;
+    }
+
+    private void OnDisable()
+    {
+        levelManager.OnUseHint -= UseHint;
     }
 
     private void Update()
@@ -44,5 +56,10 @@ public class Player : MonoBehaviour
                 }
             }
         }
+    }
+
+    void UseHint()
+    {
+        hint.ChooseRandomTarget();
     }
 }

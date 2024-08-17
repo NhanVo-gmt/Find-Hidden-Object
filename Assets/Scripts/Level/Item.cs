@@ -38,5 +38,7 @@ public class Item : MonoBehaviour
     public void Click()
     {
         gameObject.SetActive(false);
+        
+        OnClicked?.Invoke();
     }
 }
