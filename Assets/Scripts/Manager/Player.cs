@@ -60,9 +60,6 @@ public class Player : MonoBehaviour
 
     void UseHint()
     {
-        if (levelManager.GetCurrentLevelLog().State == State.Active && currencyManager.UseCurrencyLog(CurrencyManager.HINT, 1))
-        {
-            hint.ChooseRandomTarget();
-        }
+        hint.ChooseRandomTarget();
     }
 }

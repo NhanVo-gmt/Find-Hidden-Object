@@ -156,7 +156,10 @@ namespace UserData.Controller
 
         public void UseHint()
         {
-            OnUseHint?.Invoke();
+            if (GetCurrentLevelLog().State == State.Active && currencyManager.UseCurrencyLog(CurrencyManager.HINT, 1))
+            {
+                OnUseHint?.Invoke();
+            }
         }
 
         #endregion
