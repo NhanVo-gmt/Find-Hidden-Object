@@ -166,7 +166,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1535882611886546719, guid: f5420641f9b64a841949eb51432bbacb, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -132.27
+      value: -132.27002
       objectReference: {fileID: 0}
     - target: {fileID: 2082951164263062340, guid: f5420641f9b64a841949eb51432bbacb, type: 3}
       propertyPath: button
@@ -673,9 +673,21 @@ PrefabInstance:
       propertyPath: m_ReferenceResolution.y
       value: 1920
       objectReference: {fileID: 0}
+    - target: {fileID: 1231642045041426736, guid: 7371e7fbfcacb584eb0ee5bc9d1939ac, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2241449984240862061, guid: 7371e7fbfcacb584eb0ee5bc9d1939ac, type: 3}
       propertyPath: m_ClearFlags
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2241449984240862061, guid: 7371e7fbfcacb584eb0ee5bc9d1939ac, type: 3}
+      propertyPath: m_BackGroundColor.a
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2241449984240862061, guid: 7371e7fbfcacb584eb0ee5bc9d1939ac, type: 3}
+      propertyPath: m_CullingMask.m_Bits
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 3055576614414293274, guid: 7371e7fbfcacb584eb0ee5bc9d1939ac, type: 3}
       propertyPath: m_Name
@@ -721,8 +733,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9007217735911864207, guid: 7371e7fbfcacb584eb0ee5bc9d1939ac, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 4343907312400446386, guid: 7371e7fbfcacb584eb0ee5bc9d1939ac, type: 3}
+    - {fileID: 6008940940446358247, guid: 7371e7fbfcacb584eb0ee5bc9d1939ac, type: 3}
+    - {fileID: 9007217735911864207, guid: 7371e7fbfcacb584eb0ee5bc9d1939ac, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 6962547232612016662, guid: 7371e7fbfcacb584eb0ee5bc9d1939ac, type: 3}
       insertIndex: -1
