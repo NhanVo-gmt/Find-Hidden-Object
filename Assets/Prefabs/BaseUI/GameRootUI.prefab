@@ -230,10 +230,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameSettingPopupView
       objectReference: {fileID: 0}
-    - target: {fileID: 2885770681766939143, guid: 98ed7ea8d5e51e645b3e5b1a6cfaef7f, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 7053709510378999214, guid: 98ed7ea8d5e51e645b3e5b1a6cfaef7f, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

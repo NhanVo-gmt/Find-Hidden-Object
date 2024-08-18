@@ -3,27 +3,16 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using GameFoundation.Scripts.UIModule.ScreenFlow.BaseScreen.Presenter;
 using GameFoundation.Scripts.UIModule.ScreenFlow.BaseScreen.View;
-using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
 public class GameSettingPopupView : BaseView
 {
-    [Header("Sound")]
-    public Button soundButton;
-    public Image  soundImage;
-
-    [Header("Music")]
     public Button musicButton;
-    public Image musicImage;
-    
-    [Header("Haptic")]
+    public Button soundButton;
     public Button hapticButton;
-    public Image hapticImage;
-    
-    [Header("Support")]
     public Button supportButton;
-    public Image supportImage;
+    public Button closeButton;
 }
 
 [PopupInfo(nameof(GameSettingPopupView), true, false)]
@@ -36,7 +25,20 @@ public class GameSettingPopupPresenter : BasePopupPresenter<GameSettingPopupView
     
     public override UniTask BindData()
     {
+        // this.View.soundButton.onClick.AddListener();
+        this.View.closeButton.onClick.AddListener(CloseView);
         return UniTask.CompletedTask;
+    }
+
+    public override void Dispose()
+    {
+        base.Dispose();
+        
+        this.View.musicButton.onClick.RemoveAllListeners();
+        this.View.soundButton.onClick.RemoveAllListeners();
+        this.View.hapticButton.onClick.RemoveAllListeners();
+        // this.View.supportButton.onClick.RemoveAllListeners();
+        this.View.closeButton.onClick.RemoveAllListeners();
     }
 }
 

@@ -327,9 +327,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 227111916890081070}
+  - component: {fileID: -8391834992148654152}
   - component: {fileID: 6192444397493430477}
   - component: {fileID: 7930707912038508171}
-  - component: {fileID: -8391834992148654152}
   m_Layer: 5
   m_Name: GameCompletePopupView
   m_TagString: Untagged
@@ -358,6 +358,21 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &-8391834992148654152
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6271562199440968946}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d5e36607f6b4c40bf66172720d58ef0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  introAnimation: {fileID: 0}
+  outroAnimation: {fileID: 0}
+  lockInput: 1
 --- !u!225 &6192444397493430477
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -387,21 +402,6 @@ MonoBehaviour:
   gameRewardContent: {fileID: 4189391898784591974}
   gameRewardItemPrefab: {fileID: 5023517956303034420}
   claimBtn: {fileID: 7889682561608384259}
---- !u!114 &-8391834992148654152
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6271562199440968946}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d5e36607f6b4c40bf66172720d58ef0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  introAnimation: {fileID: 0}
-  outroAnimation: {fileID: 0}
-  lockInput: 1
 --- !u!1 &8877024825003694762
 GameObject:
   m_ObjectHideFlags: 0
