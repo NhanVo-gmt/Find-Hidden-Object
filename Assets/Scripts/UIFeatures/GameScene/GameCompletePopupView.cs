@@ -13,6 +13,7 @@ using GameFoundationBridge;
 using UnityEngine;
 using UnityEngine.UI;
 using UserData.Controller;
+using UserData.Model;
 using Zenject;
 
 public class GameCompletePopupView : BaseView
@@ -23,7 +24,7 @@ public class GameCompletePopupView : BaseView
 }
 
 [PopupInfo(nameof(GameCompletePopupView), true, false)]
-public class GameCompletePopupPresenter : BasePopupPresenter<GameCompletePopupView, LevelRecord>
+public class GameCompletePopupPresenter : BasePopupPresenter<GameCompletePopupView, LevelLog>
 {
     #region Inject
 
@@ -33,7 +34,7 @@ public class GameCompletePopupPresenter : BasePopupPresenter<GameCompletePopupVi
 
     #endregion
     
-    private LevelRecord              model;
+    private LevelLog                 model;
     private List<GameRewardItemView> rewardItemViews;
     
     public GameCompletePopupPresenter(SignalBus signalBus, ILogService logService, DiContainer diContainer, LevelManager levelManager, ObjectPoolManager objectPoolManager) : base(signalBus, logService)
@@ -43,7 +44,7 @@ public class GameCompletePopupPresenter : BasePopupPresenter<GameCompletePopupVi
         this.objectPoolManager = objectPoolManager;
     }
     
-    public override async UniTask BindData(LevelRecord model)
+    public override async UniTask BindData(LevelLog model)
     {
         this.model = model;
 
@@ -59,7 +60,7 @@ public class GameCompletePopupPresenter : BasePopupPresenter<GameCompletePopupVi
 
     async UniTask PopulateRewardList()
     {
-        this.rewardItemViews = this.model.LevelRewards.Values.Select(record =>
+        this.rewardItemViews = this.model.LevelRecord.LevelRewards.Values.Select(record =>
         {
             var instance = this.objectPoolManager.Spawn(this.View.gameRewardItemPrefab, this.View.gameRewardContent);
             var position = instance.transform.localPosition;

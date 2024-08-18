@@ -143,15 +143,19 @@ namespace UserData.Controller
 
         public void ShowCompletedScreen()
         {
-            this.screenManager.OpenScreen<GameCompletePopupPresenter, LevelRecord>(GetCurrentLevel());
+            this.screenManager.OpenScreen<GameCompletePopupPresenter, LevelLog>(GetCurrentLevelLog());
         }
 
-        public void ClaimReward(LevelRecord levelRecord)
+        public void ClaimReward(LevelLog levelLog)
         {
-            foreach (var levelRewardRecord in levelRecord.LevelRewards.Values)
+            if (levelLog.State != State.Complete) return;
+            
+            foreach (var levelRewardRecord in levelLog.LevelRecord.LevelRewards.Values)
             {
                 this.currencyManager.AddCurrency(levelRewardRecord.RewardId, levelRewardRecord.RewardNumber);
             }
+            
+            levelLog.State = State.Reward;
         }
 
         public void UseHint()
