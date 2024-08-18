@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using GameFoundation.Scripts.UIModule.ScreenFlow.BaseScreen.Presenter;
 using GameFoundation.Scripts.UIModule.ScreenFlow.BaseScreen.View;
+using Setting;
 using UnityEngine.UI;
 using Zenject;
 
@@ -18,9 +19,11 @@ public class GameSettingPopupView : BaseView
 [PopupInfo(nameof(GameSettingPopupView), true, false)]
 public class GameSettingPopupPresenter : BasePopupPresenter<GameSettingPopupView>
 {
-    public GameSettingPopupPresenter(SignalBus signalBus) : base(signalBus)
+    private readonly SettingManager settingManager;
+    
+    public GameSettingPopupPresenter(SignalBus signalBus, SettingManager settingManager) : base(signalBus)
     {
-        
+        this.settingManager = settingManager;
     }
     
     public override UniTask BindData()

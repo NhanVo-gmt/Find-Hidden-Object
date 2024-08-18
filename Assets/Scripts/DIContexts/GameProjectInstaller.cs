@@ -4,6 +4,7 @@ namespace DIContexts
     using GameFoundation.Scripts;
     using GameFoundation.Scripts.UIModule.ScreenFlow.Managers;
     using GameFoundationBridge;
+    using Setting;
     using UnityEngine.EventSystems;
     using UserData.Controller;
     using Zenject;
@@ -27,6 +28,7 @@ namespace DIContexts
 
             this.Container.Bind<CurrencyManager>().AsSingle();
             this.Container.Bind<LevelManager>().AsSingle();
+            this.Container.Bind<SettingManager>().AsSingle();
         }
     }
 }
