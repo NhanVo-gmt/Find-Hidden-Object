@@ -3,6 +3,7 @@ namespace DIContexts
     using DataManager.MasterData;
     using GameFoundation.Scripts;
     using GameFoundation.Scripts.UIModule.ScreenFlow.Managers;
+    using GameFoundation.Scripts.Utilities;
     using GameFoundationBridge;
     using Setting;
     using UnityEngine.EventSystems;
@@ -22,6 +23,10 @@ namespace DIContexts
 
             //Local User data
             this.Container.Bind<MasterDataManager>().AsSingle();
+            
+            //Audio
+            this.Container.Bind<MasterAudio>().FromComponentInNewPrefabResource("GameAudio").AsCached().NonLazy();
+            this.Container.BindInterfacesTo<AudioManager>().AsCached().NonLazy();
 
             //Common Event System
             this.Container.Bind<EventSystem>().FromComponentInNewPrefabResource(nameof(EventSystem)).AsSingle().NonLazy();

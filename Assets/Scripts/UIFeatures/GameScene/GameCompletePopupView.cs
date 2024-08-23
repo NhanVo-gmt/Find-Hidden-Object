@@ -37,7 +37,8 @@ public class GameCompletePopupPresenter : BasePopupPresenter<GameCompletePopupVi
     private LevelLog                 model;
     private List<GameRewardItemView> rewardItemViews;
     
-    public GameCompletePopupPresenter(SignalBus signalBus, ILogService logService, DiContainer diContainer, LevelManager levelManager, ObjectPoolManager objectPoolManager) : base(signalBus, logService)
+    public GameCompletePopupPresenter(SignalBus signalBus, ILogService logService, DiContainer diContainer, 
+                                      LevelManager levelManager, ObjectPoolManager objectPoolManager) : base(signalBus, logService)
     {
         this.diContainer       = diContainer;
         this.levelManager      = levelManager;
@@ -52,10 +53,16 @@ public class GameCompletePopupPresenter : BasePopupPresenter<GameCompletePopupVi
         this.View.claimBtn.onClick.AddListener(() =>
         {
             this.View.claimBtn.onClick.RemoveAllListeners();
+            
             this.levelManager.ClaimReward(model);
             this.CloseView();
-
         });
+    }
+
+    protected override void OnViewReady()
+    {
+        base.OnViewReady();
+        MasterAudio.Instance.PlayWinSound();
     }
 
     async UniTask PopulateRewardList()

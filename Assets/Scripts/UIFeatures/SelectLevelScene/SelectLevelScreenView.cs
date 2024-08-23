@@ -35,7 +35,8 @@ namespace UIFeatures.LoadingScene
         private readonly CurrencyManager currencyManager;
         private readonly DiContainer     diContainer;
 
-        public SelectLevelScreenPresenter(SignalBus signalBus, LevelManager levelManager, CurrencyManager currencyManager, DiContainer diContainer) : base(signalBus)
+        public SelectLevelScreenPresenter(SignalBus signalBus, LevelManager levelManager, CurrencyManager currencyManager, 
+                                          DiContainer diContainer) : base(signalBus)
         {
             this.levelManager    = levelManager;
             this.currencyManager = currencyManager;
@@ -45,6 +46,7 @@ namespace UIFeatures.LoadingScene
         protected override void OnViewReady()
         {
             base.OnViewReady();
+            
             this.OpenViewAsync().Forget();
         }
 

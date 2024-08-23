@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using GameFoundation.Scripts.Utilities;
 using GameFoundation.Scripts.Utilities.Extension;
 using UnityEngine;
 using UserData.Controller;
@@ -12,12 +13,11 @@ public class Player : MonoBehaviour
     #region Inject
 
     [Inject] private LevelManager    levelManager;
-    [Inject] private CurrencyManager currencyManager;
 
     #endregion
 
-    [SerializeField] private Hint hint;
-    
+    [SerializeField] private string sound = "pickup_sound";
+    [SerializeField] private Hint   hint;
     
     private void Start()
     {
@@ -51,11 +51,17 @@ public class Player : MonoBehaviour
                 
                 if (rayHit.transform != null && rayHit.transform.TryGetComponent<Item>(out Item item))
                 {
-                    levelManager.SelectItem(item.Id, item.Index);
-                    item.Click();
+                    FindItem(item);
                 }
             }
         }
+    }
+
+    void FindItem(Item item)
+    {
+        AudioManager.Instance.PlaySound(sound, MasterAudio.Instance.soundAudioSource);
+        levelManager.SelectItem(item.Id, item.Index);
+        item.Click();
     }
 
     void UseHint()
