@@ -46,7 +46,9 @@ public class SelectLevelItemPresenter : BaseUIItemPresenter<SelectLevelItemView,
 
     private SelectLevelItemModel  model;
     
-    public SelectLevelItemPresenter(IGameAssets gameAssets, ObjectPoolManager objectPoolManager, DiContainer diContainer, GameSceneDirector gameSceneDirector, LevelManager levelManager) : base(gameAssets)
+    public SelectLevelItemPresenter(IGameAssets gameAssets, ObjectPoolManager objectPoolManager, 
+                                    DiContainer diContainer, GameSceneDirector gameSceneDirector, 
+                                    LevelManager levelManager) : base(gameAssets)
     {
         this.objectPoolManager = objectPoolManager;
         this.diContainer       = diContainer;
@@ -61,6 +63,7 @@ public class SelectLevelItemPresenter : BaseUIItemPresenter<SelectLevelItemView,
         this.View.button.onClick.AddListener(async () =>
         {
             this.View.button.onClick.RemoveAllListeners();
+            
             levelManager.SelectLevel(this.model.levelRecord);
             await LoadSelectedLevelScene();
         });

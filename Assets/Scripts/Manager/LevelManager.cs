@@ -1,13 +1,11 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using DataManager.MasterData;
-using DataManager.UserData;
-using UnityEngine;
-using UserData.Model;
-
 namespace UserData.Controller
 {
+    using System;
+    using System.Collections.Generic;
+    using DataManager.MasterData;
+    using DataManager.UserData;
+    using UnityEngine;
+    using UserData.Model;
     using System.Linq;
     using Blueprints;
     using GameFoundation.Scripts.UIModule.ScreenFlow.Managers;
