@@ -1,12 +1,8 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using Cysharp.Threading.Tasks;
-using GameFoundation.Scripts.AssetLibrary;
 using GameFoundation.Scripts.Utilities;
 using GameFoundation.Scripts.Utilities.Extension;
+using Setting;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Zenject;
 
 public class MasterAudio : MonoBehaviour
@@ -16,7 +12,8 @@ public class MasterAudio : MonoBehaviour
 
     public AudioSource musicAudioSource;
     public AudioSource soundAudioSource;
-    
+
+    [Inject] private SettingManager settingManager;
 
     private void Awake()
     {
@@ -26,7 +23,30 @@ public class MasterAudio : MonoBehaviour
         musicAudioSource = GetComponent<AudioSource>();
     }
 
-    private void Start() { this.GetCurrentContainer().Inject(this); }
+    private void Start()
+    {
+        this.GetCurrentContainer().Inject(this);
+
+        settingManager.OnDataLoadedCompleted += SettingManager_OnDataLoaded;
+    }
+
+    void SettingManager_OnDataLoaded()
+    {
+        musicAudioSource.mute = !settingManager.GetMusicState();
+        soundAudioSource.mute = !settingManager.GetSoundState();
+    }
+
+    public void ToggleMusic()
+    {
+        settingManager.SetMusicState(musicAudioSource.mute);
+        musicAudioSource.mute = !musicAudioSource.mute;
+    }
+
+    public void ToggleSound()
+    {
+        settingManager.SetSoundState(soundAudioSource.mute);
+        soundAudioSource.mute = !soundAudioSource.mute;
+    }
 
     public void PlayWinSound()
     {

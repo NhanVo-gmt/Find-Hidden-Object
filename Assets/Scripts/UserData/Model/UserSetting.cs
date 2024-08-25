@@ -8,9 +8,9 @@ namespace Setting
 
     public class UserSetting : IUserData, ILocalData
     {
-        public float MusicValue  = 1f;
-        public float SoundValue  = 1f;
-        public bool  HapticValue = true;
+        public bool MusicEnable  = true;
+        public bool SoundEnable  = true;
+        public bool HapticEnable = true;
     }
 
 }

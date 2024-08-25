@@ -1,11 +1,6 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using GameFoundation.Scripts.Utilities;
 using GameFoundation.Scripts.Utilities.Extension;
 using UnityEngine;
 using UserData.Controller;
-using UserData.Model;
 using Zenject;
 
 public class Player : MonoBehaviour

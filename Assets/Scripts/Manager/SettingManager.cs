@@ -1,5 +1,6 @@
 namespace Setting
 {
+    using System;
     using System.Collections;
     using System.Collections.Generic;
     using DataManager.MasterData;
@@ -10,19 +11,37 @@ namespace Setting
 
     public class SettingManager : BaseDataManager<UserSetting>
     {
-        private SoundSetting soundSetting;
-        
+        public Action OnDataLoadedCompleted;
+
         public SettingManager(MasterDataManager masterDataManager) : base(masterDataManager)
         {
-            
+
         }
 
         protected override void OnDataLoaded()
         {
             base.OnDataLoaded();
+            OnDataLoadedCompleted?.Invoke();
+        }
 
-            soundSetting.SoundValue.Value = this.Data.SoundValue;
-            soundSetting.MusicValue.Value = this.Data.MusicValue;
+        public bool GetMusicState()
+        {
+            return Data.MusicEnable;
+        }
+        
+        public void SetMusicState(bool isEnable)
+        {
+            this.Data.MusicEnable = isEnable;
+        }
+        
+        public bool GetSoundState()
+        {
+            return Data.SoundEnable;
+        }
+        
+        public void SetSoundState(bool isEnable)
+        {
+            this.Data.MusicEnable = isEnable;
         }
     }
 

@@ -28,7 +28,8 @@ public class GameSettingPopupPresenter : BasePopupPresenter<GameSettingPopupView
     
     public override UniTask BindData()
     {
-        // this.View.soundButton.onClick.AddListener();
+        this.View.soundButton.onClick.AddListener(MasterAudio.Instance.ToggleSound);
+        this.View.musicButton.onClick.AddListener(MasterAudio.Instance.ToggleMusic);
         this.View.closeButton.onClick.AddListener(CloseView);
         return UniTask.CompletedTask;
     }
