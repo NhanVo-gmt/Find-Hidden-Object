@@ -59,7 +59,7 @@ public class Player : MonoBehaviour
 
     void FindItem(Item item)
     {
-        AudioManager.Instance.PlaySound(sound, MasterAudio.Instance.soundAudioSource);
+        MasterAudio.Instance.PlaySound(sound);
         levelManager.SelectItem(item.Id, item.Index);
         item.Click();
     }

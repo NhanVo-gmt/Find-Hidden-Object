@@ -32,4 +32,9 @@ public class MasterAudio : MonoBehaviour
     {
         AudioManager.Instance.PlaySound(WINSOUND, soundAudioSource);
     }
+
+    public void PlaySound(string sound)
+    {
+        AudioManager.Instance.PlaySound(sound, soundAudioSource);
+    }
 }

@@ -29,6 +29,6 @@ public class BaseButtonClickEvent : MonoBehaviour
 
     void PlaySound()
     {
-        AudioManager.Instance.PlaySound(sound, MasterAudio.Instance.soundAudioSource);
+        MasterAudio.Instance.PlaySound(sound);
     }
 }
