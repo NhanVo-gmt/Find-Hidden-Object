@@ -41,7 +41,7 @@ namespace Setting
         
         public void SetSoundState(bool isEnable)
         {
-            this.Data.MusicEnable = isEnable;
+            this.Data.SoundEnable = isEnable;
         }
     }
 

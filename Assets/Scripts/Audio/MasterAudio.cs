@@ -44,6 +44,7 @@ public class MasterAudio : MonoBehaviour
 
     public void ToggleSound()
     {
+        Debug.Log(123);
         settingManager.SetSoundState(soundAudioSource.mute);
         soundAudioSource.mute = !soundAudioSource.mute;
     }

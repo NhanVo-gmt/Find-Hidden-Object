@@ -38,11 +38,11 @@ public class GameSettingPopupPresenter : BasePopupPresenter<GameSettingPopupView
     {
         base.Dispose();
         
-        this.View.musicButton.onClick.RemoveAllListeners();
-        this.View.soundButton.onClick.RemoveAllListeners();
+        this.View.soundButton.onClick.RemoveListener(MasterAudio.Instance.ToggleSound);
+        this.View.musicButton.onClick.RemoveListener(MasterAudio.Instance.ToggleMusic);
         this.View.hapticButton.onClick.RemoveAllListeners();
         // this.View.supportButton.onClick.RemoveAllListeners();
-        this.View.closeButton.onClick.RemoveAllListeners();
+        this.View.closeButton.onClick.RemoveListener(CloseView);
     }
 }
 
