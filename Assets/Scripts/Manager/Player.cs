@@ -1,11 +1,6 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using GameFoundation.Scripts.Utilities;
 using GameFoundation.Scripts.Utilities.Extension;
 using UnityEngine;
 using UserData.Controller;
-using UserData.Model;
 using Zenject;
 
 public class Player : MonoBehaviour
@@ -59,7 +54,7 @@ public class Player : MonoBehaviour
 
     void FindItem(Item item)
     {
-        AudioManager.Instance.PlaySound(sound, MasterAudio.Instance.soundAudioSource);
+        MasterAudio.Instance.PlaySound(sound);
         levelManager.SelectItem(item.Id, item.Index);
         item.Click();
     }

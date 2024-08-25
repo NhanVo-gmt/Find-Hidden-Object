@@ -1,7 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using GameFoundation.Scripts.Utilities;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -29,6 +25,6 @@ public class BaseButtonClickEvent : MonoBehaviour
 
     void PlaySound()
     {
-        AudioManager.Instance.PlaySound(sound, MasterAudio.Instance.soundAudioSource);
+        MasterAudio.Instance.PlaySound(sound);
     }
 }

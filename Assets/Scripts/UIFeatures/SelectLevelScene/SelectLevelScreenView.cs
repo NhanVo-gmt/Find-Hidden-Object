@@ -9,6 +9,7 @@ namespace UIFeatures.LoadingScene
     using DG.Tweening;
     using GameFoundation.Scripts.UIModule.ScreenFlow.BaseScreen.Presenter;
     using GameFoundation.Scripts.UIModule.ScreenFlow.BaseScreen.View;
+    using GameFoundation.Scripts.UIModule.ScreenFlow.Managers;
     using GameFoundationBridge;
     using TMPro;
     using UnityEngine;
@@ -34,13 +35,15 @@ namespace UIFeatures.LoadingScene
         private readonly LevelManager    levelManager;
         private readonly CurrencyManager currencyManager;
         private readonly DiContainer     diContainer;
+        private readonly IScreenManager  screenManager;
 
         public SelectLevelScreenPresenter(SignalBus signalBus, LevelManager levelManager, CurrencyManager currencyManager, 
-                                          DiContainer diContainer) : base(signalBus)
+                                          DiContainer diContainer, IScreenManager screenManager) : base(signalBus)
         {
             this.levelManager    = levelManager;
             this.currencyManager = currencyManager;
             this.diContainer     = diContainer;
+            this.screenManager   = screenManager;
         }
 
         protected override void OnViewReady()
@@ -54,7 +57,14 @@ namespace UIFeatures.LoadingScene
         {
             SetCoinText();
             
+            this.View.settingButton.onClick.AddListener(OpenSettingScreen);
+            
             await PopulateLevelList();
+        }
+
+        void OpenSettingScreen()
+        {
+            this.screenManager.OpenScreen<GameSettingPopupPresenter>();
         }
 
         void SetCoinText()
@@ -70,6 +80,13 @@ namespace UIFeatures.LoadingScene
             {
                 return new SelectLevelItemModel(record);
             }).ToList(), this.diContainer);
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            this.View.settingButton.onClick.RemoveListener(OpenSettingScreen);
+            // this.View.shopButton.onClick.RemoveAllListeners();
         }
     }
 }
