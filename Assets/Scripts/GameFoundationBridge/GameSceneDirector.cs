@@ -1,5 +1,6 @@
 namespace GameFoundationBridge
 {
+    using System;
     using Cysharp.Threading.Tasks;
     using GameFoundation.Scripts.AssetLibrary;
     using GameFoundation.Scripts.UIModule.ScreenFlow.Managers;
@@ -15,17 +16,20 @@ namespace GameFoundationBridge
 
     public class GameSceneDirector : SceneDirector
     {
+        public static Action StartLoadScene;
         public GameSceneDirector(SignalBus signalBus, IGameAssets gameAssets) : base(signalBus, gameAssets) { CurrentSceneName = SceneName.Loading; }
 
         #region shortcut
 
         public UniTask LoadLevelSelectScene()
         {
+            StartLoadScene?.Invoke();
             return this.LoadSingleSceneBySceneManagerAsync(SceneName.LevelSelectScene);
         }
         
         public UniTask LoadLevelScene(string id)
         {
+            StartLoadScene?.Invoke();
             string levelName = $"Level {id}";
             return this.LoadMultipleSceneBySceneManagerAsync(SceneName.GameScene, SceneName.GameScene, levelName);
         }

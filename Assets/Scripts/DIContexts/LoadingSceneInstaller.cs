@@ -9,7 +9,7 @@ namespace DIContexts
         public override void InstallBindings()
         {
             base.InstallBindings();
-            this.Container.InitScreenManually<LoadingScreenPresenter>();
+            this.Container.InitScreenManually<StartLoadingScreenPresenter>();
         }
     }
 }
