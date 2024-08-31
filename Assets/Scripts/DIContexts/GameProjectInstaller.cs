@@ -27,6 +27,9 @@ namespace DIContexts
             //Audio
             this.Container.Bind<MasterAudio>().FromComponentInNewPrefabResource("GameAudio").AsCached().NonLazy();
             this.Container.BindInterfacesTo<AudioManager>().AsCached().NonLazy();
+            
+            //Loading
+            this.Container.Bind<LoadingScreenView>().FromComponentInNewPrefabResource("LoadingScreenView").AsCached().NonLazy();
 
             //Common Event System
             this.Container.Bind<EventSystem>().FromComponentInNewPrefabResource(nameof(EventSystem)).AsSingle().NonLazy();
