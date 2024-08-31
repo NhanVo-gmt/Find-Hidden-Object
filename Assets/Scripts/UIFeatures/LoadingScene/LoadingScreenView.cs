@@ -57,7 +57,7 @@ public class LoadingScreenView : MonoBehaviour
         });
         sequence.AppendInterval(easeInTime);
         sequence.Append(canvasGroup.DOFade(1, wordFadeTime));
-        sequence.AppendInterval(1f);
+        sequence.AppendInterval(0.2f);
 
         sequence.OnComplete(() =>
         {
