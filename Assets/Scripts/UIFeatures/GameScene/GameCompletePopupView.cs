@@ -23,7 +23,7 @@ public class GameCompletePopupView : BaseView
     public Button             claimBtn;
 }
 
-[PopupInfo(nameof(GameCompletePopupView), true, false)]
+[PopupInfo(nameof(GameCompletePopupView), false, false)]
 public class GameCompletePopupPresenter : BasePopupPresenter<GameCompletePopupView, LevelLog>
 {
     #region Inject

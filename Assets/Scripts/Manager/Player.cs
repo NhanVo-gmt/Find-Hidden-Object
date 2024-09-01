@@ -11,8 +11,12 @@ public class Player : MonoBehaviour
 
     #endregion
 
-    [SerializeField] private string sound = "pickup_sound";
-    [SerializeField] private Hint   hint;
+    [Header("Find")]
+    [SerializeField] private string         sound = "pickup_sound";
+    [SerializeField] private ParticleSystem findParticle;
+    
+    [Header("Hint")]
+    [SerializeField] private Hint           hint;
     
     private void Start()
     {
@@ -57,6 +61,9 @@ public class Player : MonoBehaviour
         MasterAudio.Instance.PlaySound(sound);
         levelManager.SelectItem(item.Id, item.Index);
         item.Click();
+
+        findParticle.transform.position = item.transform.position;
+        findParticle.Play();
     }
 
     void UseHint()
