@@ -1,5 +1,6 @@
 namespace GameFoundationBridge
 {
+    using System;
     using Cysharp.Threading.Tasks;
     using GameFoundation.Scripts.AssetLibrary;
     using GameFoundation.Scripts.UIModule.ScreenFlow.Managers;
@@ -15,19 +16,33 @@ namespace GameFoundationBridge
 
     public class GameSceneDirector : SceneDirector
     {
-        public GameSceneDirector(SignalBus signalBus, IGameAssets gameAssets) : base(signalBus, gameAssets) { CurrentSceneName = SceneName.Loading; }
+        private LoadingScreenView loadingScreenView;
+        public GameSceneDirector(SignalBus signalBus, IGameAssets gameAssets, LoadingScreenView loadingScreenView) :
+            base(signalBus, gameAssets)
+        {
+            CurrentSceneName       = SceneName.Loading;
+            this.loadingScreenView = loadingScreenView;
+        }
 
         #region shortcut
-
-        public UniTask LoadLevelSelectScene()
+        
+        public UniTask FirstLoadLevelSelectScene()
         {
             return this.LoadSingleSceneBySceneManagerAsync(SceneName.LevelSelectScene);
         }
-        
-        public UniTask LoadLevelScene(string id)
+
+        public async UniTask LoadLevelSelectScene()
         {
+            await loadingScreenView.Show();
+            await this.LoadSingleSceneBySceneManagerAsync(SceneName.LevelSelectScene);
+        }
+        
+        public async UniTask LoadLevelScene(string id)
+        {
+            await loadingScreenView.Show();
+            
             string levelName = $"Level {id}";
-            return this.LoadMultipleSceneBySceneManagerAsync(SceneName.GameScene, SceneName.GameScene, levelName);
+            await this.LoadMultipleSceneBySceneManagerAsync(SceneName.GameScene, SceneName.GameScene, levelName);
         }
         
 

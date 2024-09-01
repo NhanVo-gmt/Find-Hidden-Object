@@ -1,64 +1,81 @@
-namespace UIFeatures.LoadingScene
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
+using DG.Tweening;
+using GameFoundation.Scripts.Utilities.Extension;
+using GameFoundationBridge;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+public class LoadingScreenView : MonoBehaviour
 {
-    using Cysharp.Threading.Tasks;
-    using DataManager.MasterData;
-    using DG.Tweening;
-    using GameFoundation.Scripts.UIModule.ScreenFlow.BaseScreen.Presenter;
-    using GameFoundation.Scripts.UIModule.ScreenFlow.BaseScreen.View;
-    using GameFoundationBridge;
-    using UnityEngine;
-    using UnityEngine.UI;
-    using Zenject;
+    [SerializeField] private RectTransform leftGameObject;
+    [SerializeField] private RectTransform rightGameObject;
+    [SerializeField] private CanvasGroup canvasGroup;
 
-    [ScreenInfo(nameof(LoadingScreenView))]
-    public class LoadingScreenPresenter : BaseScreenPresenter<LoadingScreenView>
+    [Header("Lerp")]
+    [SerializeField] private float easeInTime = 1f;
+    [SerializeField] private float wordFadeTime = 0.5f;
+
+    private Vector3 startLeftPos = new Vector3(-600, 0, 0);
+    private Vector3 startRightPos = new Vector3(600, 0, 0);
+
+    private bool isAnimate = false;
+
+    public Action OnFinishShow;
+
+    private void Awake()
     {
-        private readonly GameSceneDirector sceneDirector;
-        private readonly MasterDataManager masterDataManager;
-
-        public LoadingScreenPresenter(SignalBus signalBus, GameSceneDirector sceneDirector, MasterDataManager masterDataManager) : base(signalBus)
-        {
-            this.sceneDirector     = sceneDirector;
-            this.masterDataManager = masterDataManager;
-        }
-
-        protected override void OnViewReady()
-        {
-            base.OnViewReady();
-            this.OpenViewAsync().Forget();
-        }
-
-        public override UniTask BindData()
-        {
-            this.Init();
-
-            return UniTask.CompletedTask;
-        }
-
-        private async void Init()
-        {
-            await (
-                this.FakeLoading(),
-                this.masterDataManager.InitializeData()
-            );
-
-            this.sceneDirector.LoadLevelSelectScene();
-        }
-
-        private async UniTask FakeLoading()
-        {
-            await DOTween.To(
-                getter: () => 0f,
-                setter: percent => this.View.SldLoading.value = percent / 100f,
-                endValue: 100f,
-                duration: 1f
-            ).SetEase(Ease.Linear).AsyncWaitForCompletion();
-        }
+        canvasGroup.alpha = 0f;
     }
 
-    public class LoadingScreenView : BaseView
+    private void OnEnable()
     {
-        [SerializeField] private Slider sldLoading;
-        public                   Slider SldLoading => this.sldLoading;
+        SceneManager.sceneLoaded += SceneManager_OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= SceneManager_OnSceneLoaded;
+    }
+
+    private void SceneManager_OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
+    {
+        Hide();
+    }
+
+    public async UniTask Show()
+    {
+        isAnimate = true;
+        
+        var sequence = DOTween.Sequence();
+        sequence.AppendCallback(() =>
+        {
+            leftGameObject.DOAnchorPos(Vector3.one, easeInTime).SetEase(Ease.InOutSine);
+            rightGameObject.DOAnchorPos(Vector3.one, easeInTime).SetEase(Ease.InOutSine);
+        });
+        sequence.AppendInterval(easeInTime);
+        sequence.Append(canvasGroup.DOFade(1, wordFadeTime));
+        sequence.AppendInterval(0.2f);
+
+        sequence.OnComplete(() =>
+        {
+            isAnimate = false;
+        });
+
+        await sequence.AsyncWaitForCompletion();
+    }
+
+    async void Hide()
+    {
+        await UniTask.WaitUntil(() => !isAnimate);
+        canvasGroup.DOFade(0, wordFadeTime).OnComplete(() =>
+        {
+            leftGameObject.DOAnchorPos(startLeftPos, easeInTime).SetEase(Ease.InOutSine);
+            rightGameObject.DOAnchorPos(startRightPos, easeInTime).SetEase(Ease.InOutSine);
+        });
+        
+        
     }
 }
