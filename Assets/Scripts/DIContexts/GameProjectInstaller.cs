@@ -37,6 +37,7 @@ namespace DIContexts
             this.Container.Bind<CurrencyManager>().AsSingle();
             this.Container.Bind<LevelManager>().AsSingle();
             this.Container.Bind<SettingManager>().AsSingle();
+            this.Container.Bind<AssetService>().AsSingle();
         }
     }
 }
