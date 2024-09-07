@@ -8,6 +8,7 @@ namespace DIContexts
     using Setting;
     using UnityEngine.EventSystems;
     using UserData.Controller;
+    using Wallet.Manager;
     using Zenject;
 
     public class GameProjectInstaller : MonoInstaller
@@ -27,6 +28,9 @@ namespace DIContexts
             //Audio
             this.Container.Bind<MasterAudio>().FromComponentInNewPrefabResource("GameAudio").AsCached().NonLazy();
             this.Container.BindInterfacesTo<AudioManager>().AsCached().NonLazy();
+            
+            //Module
+            WalletInstaller.Install(this.Container);
             
             //Loading
             this.Container.Bind<LoadingScreenView>().FromComponentInNewPrefabResource("LoadingScreenView").AsCached().NonLazy();

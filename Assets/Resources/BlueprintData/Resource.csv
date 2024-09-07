@@ -1,0 +1,3 @@
+Id,Name,Description,Icon,IsDefault,DefaultValue
+Money,Money,,item_money,TRUE,0
+Gem,Gem,,status_icon_gem,TRUE,0
