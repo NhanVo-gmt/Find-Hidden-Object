@@ -22,9 +22,23 @@ public class AssetService
     private FloatingCloudSetting                                  floatingCloudSetting;
     private Dictionary<string, Dictionary<string, RectTransform>> assetFlyingTargetTransforms = new();
 
-    public AssetService(ObjectPoolManager objectPoolManager)
+    public AssetService(ObjectPoolManager objectPoolManager, IGameAssets gameAssets)
     {
         this.objectPoolManager = objectPoolManager;
+        this.gameAssets        = gameAssets;
+        
+        InitFloatingCloud();
+    }
+    
+    private async void InitFloatingCloud()
+    {
+        this.floatingCloudSetting = new FloatingCloudSetting
+        {
+            CloudRadius      = 200,
+            Prefab           = await this.gameAssets.LoadAssetAsync<GameObject>("CommonFloatingAsset"),
+            // AppearAudioClip  = await this.gameAssets.LoadAssetAsync<AudioClip>("coin_appear"),
+            // CollectAudioClip = await this.gameAssets.LoadAssetAsync<AudioClip>("coin_pickup")
+        };
     }
 
     // public async UniTask<Sprite> GetCurrencyIcon(string currencyId)
@@ -73,31 +87,36 @@ public class AssetService
         public float      CloudRadius;
     }
     
-    public async UniTask ClaimRewardWithAnimation(List<Asset> assets, Transform rewardTransform)
+    // public async UniTask ClaimRewardWithAnimation(List<Asset> assets, Transform rewardTransform)
+    // {
+    //     var completeSource = new UniTaskCompletionSource();
+    //     this.SpawnAssetsCloud(assets, rewardTransform, asset =>
+    //         {
+    //             this.transactionManager.ReceivePayout(asset);
+    //         },
+    //         () =>
+    //         {
+    //             completeSource.TrySetResult();
+    //         });
+    //             
+    //     await completeSource.Task;
+    // }
+    //
+    // public void SpawnAssetsCloud(List<Asset> assets, Transform rewardTransform, Action<Asset> onAssetHittedTarget, Action onComplete = null)
+    // {
+    //     for (var index = 0; index < assets.Count; index++)
+    //     {
+    //         var asset = assets[index];
+    //         this.SpawnAssetCloud(asset.AssetType, asset.AssetId, rewardTransform, asset.Amount, delegate { onAssetHittedTarget?.Invoke(asset); }, index == assets.Count - 1 ? onComplete : null);
+    //     }
+    // }
+    
+    public void SpawnAssetsCloud(Sprite sprite, Transform rewardTransform, Transform targetRectTransform, int amount, Action onAssetHittedTarget = null, Action onComplete = null)
     {
-        var completeSource = new UniTaskCompletionSource();
-        this.SpawnAssetsCloud(assets, rewardTransform, asset =>
-            {
-                this.transactionManager.ReceivePayout(asset);
-            },
-            () =>
-            {
-                completeSource.TrySetResult();
-            });
-                
-        await completeSource.Task;
+        this.SpawnAssetCloud(sprite, rewardTransform, targetRectTransform, amount, delegate { onAssetHittedTarget?.Invoke(); }, onComplete : null);
     }
     
-    public void SpawnAssetsCloud(List<Asset> assets, Transform rewardTransform, Action<Asset> onAssetHittedTarget, Action onComplete = null)
-    {
-        for (var index = 0; index < assets.Count; index++)
-        {
-            var asset = assets[index];
-            this.SpawnAssetCloud(asset.AssetType, asset.AssetId, rewardTransform, asset.Amount, delegate { onAssetHittedTarget?.Invoke(asset); }, index == assets.Count - 1 ? onComplete : null);
-        }
-    }
-    
-    public void SpawnAssetCloud(string assetType, string assetId, Transform rewardTransform, int elementsAmount, Action onAssetHittedTarget = null, Action onComplete = null)
+    public void SpawnAssetCloud(string assetType, string assetId, Sprite sprite, Transform rewardTransform, int elementsAmount, Action onAssetHittedTarget = null, Action onComplete = null)
     {
         if (!this.TryGetAssetFlyingTarget(assetType, assetId, out var targetRectTransform))
         {
@@ -107,59 +126,77 @@ public class AssetService
             return;
         }
             
-        SpawnAssetCloud(assetType, assetId, rewardTransform, targetRectTransform, elementsAmount, onAssetHittedTarget, onComplete);
+        Debug.LogError(123);
+        SpawnAssetCloud(sprite, rewardTransform, targetRectTransform, elementsAmount, onAssetHittedTarget, onComplete);
     }
     
-    public void SpawnAssetCloud(string    assetType,           string assetId, Transform rewardTransform,
-                                Transform targetRectTransform, int    elementsAmount,
+    public void SpawnAssetCloud(string assetType, Sprite sprite, Transform rewardTransform, int elementsAmount, Action onAssetHittedTarget = null, Action onComplete = null)
+    {
+        if (!this.TryGetAssetFlyingTarget(assetType, assetType, out var targetRectTransform))
+        {
+            Debug.LogWarning($"Target transform for asset {assetType} - {assetType} not found!");
+            onAssetHittedTarget?.Invoke();
+            onComplete?.Invoke();
+            return;
+        }
+            
+        Debug.LogError(123);
+        SpawnAssetCloud(sprite, rewardTransform, targetRectTransform, elementsAmount, onAssetHittedTarget, onComplete);
+    }
+
+    public void SpawnAssetCloud(Sprite    sprite,              Transform rewardTransform,
+                                Transform targetRectTransform, int       elementsAmount,
                                 Action    onAssetHittedTarget = null,
                                 Action    onComplete          = null)
+    {
+
+        var targetObject = new GameObjectWrapper(targetRectTransform.gameObject);
+        targetObject.SetNewParent(rewardTransform.GetComponentInParent<Canvas>().transform);
+        this.floatingCloudSetting.Prefab.RecycleAll();
+
+        // Play appear sound
+        // if (this.floatingCloudSetting.AppearAudioClip != null)
+        //     AudioController.PlaySound(this.floatingCloudSetting.AppearAudioClip);
+
+        float   cloudRadius = this.floatingCloudSetting.CloudRadius;
+        Vector3 centerPoint = rewardTransform.position;
+
+        float defaultPitch         = 0.9f;
+        bool  currencyHittedTarget = false;
+        elementsAmount = Mathf.Min(elementsAmount, 100);
+        for (int i = 0; i < elementsAmount; i++)
         {
-            
-            var targetObject = new GameObjectWrapper(targetRectTransform.gameObject);
-            targetObject.SetNewParent(rewardTransform.GetComponentInParent<Canvas>().transform);
-            this.floatingCloudSetting.Prefab.RecycleAll();
+            bool       isLastElement = i == elementsAmount - 1;
+            GameObject elementObject = this.floatingCloudSetting.Prefab.Spawn();
+            elementObject.transform.SetParent(targetRectTransform);
 
-            // Play appear sound
-            // if (this.floatingCloudSetting.AppearAudioClip != null)
-            //     AudioController.PlaySound(this.floatingCloudSetting.AppearAudioClip);
+            //elementObject.transform.SetParent(targetRectTransform);
+            //elementObject.transform.SetAsLastSibling();
+            //elementObject.transform.SetParent(currencyCloud.coinsContainerRectTransform);
 
-            float   cloudRadius = 10f;
-            Vector3 centerPoint = rewardTransform.position;
+            elementObject.transform.position      = centerPoint;
+            elementObject.transform.localRotation = Quaternion.identity;
+            elementObject.transform.localScale    = Vector3.one;
 
-            float defaultPitch         = 0.9f;
-            bool  currencyHittedTarget = false;
-            elementsAmount = Mathf.Min(elementsAmount, 100);
-            for (int i = 0; i < elementsAmount; i++)
-            {
-                bool       isLastElement = i == elementsAmount - 1;
-                GameObject elementObject = this.floatingCloudSetting.Prefab.Spawn();
-                elementObject.transform.SetParent(targetRectTransform);
+            Image elementImage = elementObject.GetComponent<Image>();
+            elementImage.sprite = sprite;
+            elementImage.color  = Color.white.SetAlpha(0);
 
-                //elementObject.transform.SetParent(targetRectTransform);
-                //elementObject.transform.SetAsLastSibling();
-                //elementObject.transform.SetParent(currencyCloud.coinsContainerRectTransform);
+            float moveTime = Random.Range(0.6f, 0.8f);
 
-                elementObject.transform.position      = centerPoint;
-                elementObject.transform.localRotation = Quaternion.identity;
-                elementObject.transform.localScale    = Vector3.one;
-
-                Image elementImage = elementObject.GetComponent<Image>();
-                this.GetAssetIcon(assetType, assetId).ContinueWith(delegate(Sprite sprite) { elementImage.sprite = sprite; });
-                elementImage.color  = Color.white.SetAlpha(0);
-
-                float moveTime = Random.Range(0.6f, 0.8f);
-
-                TweenCase     currencyTweenCase    = null;
-                RectTransform elementRectTransform = (RectTransform)elementObject.transform;
-                elementImage.DOFade(1, 0.2f, unscaledTime: true);
-                elementRectTransform.DOAnchoredPosition(elementRectTransform.anchoredPosition + (Random.insideUnitCircle * cloudRadius), moveTime, unscaledTime: true).SetEasing(Ease.Type.CubicOut)
-                    .OnComplete(delegate
+            TweenCase     currencyTweenCase    = null;
+            RectTransform elementRectTransform = (RectTransform)elementObject.transform;
+            elementImage.DOFade(1, 0.2f, unscaledTime: true);
+            elementRectTransform
+                .DOAnchoredPosition(elementRectTransform.anchoredPosition + (Random.insideUnitCircle * cloudRadius),
+                    moveTime, unscaledTime: true).SetEasing(Ease.Type.CubicOut)
+                .OnComplete(delegate
+                {
+                    Tween.DelayedCall(0.1f, delegate
                     {
-                        Tween.DelayedCall(0.1f, delegate
-                        {
-                            elementRectTransform.DOScale(0.3f, 0.5f, unscaledTime: true).SetEasing(Ease.Type.ExpoIn);
-                            elementRectTransform.DOLocalMove(Vector3.zero, 0.5f, unscaledTime: true).SetEasing(Ease.Type.SineIn).OnComplete(delegate
+                        elementRectTransform.DOScale(0.3f, 0.5f, unscaledTime: true).SetEasing(Ease.Type.ExpoIn);
+                        elementRectTransform.DOLocalMove(Vector3.zero, 0.5f, unscaledTime: true)
+                            .SetEasing(Ease.Type.SineIn).OnComplete(delegate
                             {
                                 if (!currencyHittedTarget)
                                 {
@@ -190,10 +227,15 @@ public class AssetService
 
                                     defaultPitch += 0.01f;
 
-                                    currencyTweenCase = targetRectTransform.DOScale(1.2f, 0.15f, unscaledTime: true).OnComplete(delegate
-                                    {
-                                        currencyTweenCase = targetRectTransform.DOScale(1.0f, 0.1f, unscaledTime: true).OnComplete(delegate { Complete(isLastElement); });
-                                    });
+                                    currencyTweenCase = targetRectTransform.DOScale(1.2f, 0.15f, unscaledTime: true)
+                                        .OnComplete(delegate
+                                        {
+                                            currencyTweenCase = targetRectTransform
+                                                .DOScale(1.0f, 0.1f, unscaledTime: true).OnComplete(delegate
+                                                {
+                                                    Complete(isLastElement);
+                                                });
+                                        });
                                 }
                                 else
                                 {
@@ -203,17 +245,17 @@ public class AssetService
                                 elementObject.transform.SetParent(targetRectTransform);
                                 elementRectTransform.Recycle();
                             });
-                        }, unscaledTime: true);
-                    });
-            }
+                    }, unscaledTime: true);
+                });
+        }
 
-            void Complete(bool isLastElement)
+        void Complete(bool isLastElement)
+        {
+            if (isLastElement)
             {
-                if (isLastElement)
-                {
-                    onComplete?.Invoke();
-                    targetObject.SetOriginParent();
-                }
+                onComplete?.Invoke();
+                targetObject.SetOriginParent();
             }
         }
+    }
 }

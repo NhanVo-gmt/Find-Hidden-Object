@@ -9,12 +9,15 @@ public class Item : MonoBehaviour
     public string Id;
     public int    Index;
 
+    public Sprite sprite { get; private set; }
+
     public Action OnClicked;
 
     public void Init(string Id, int Index, Sprite sprite)
     {
-        this.Id    = Id;
-        this.Index = Index;
+        this.Id     = Id;
+        this.Index  = Index;
+        this.sprite = sprite;
 
         gameObject.name = $"{Id} {Index}";
         

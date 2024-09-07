@@ -10,6 +10,7 @@ namespace DIContexts
     using UserData.Controller;
     using Wallet.Manager;
     using Zenject;
+    using Initialiser = Initialiser;
 
     public class GameProjectInstaller : MonoInstaller
     {
@@ -42,6 +43,8 @@ namespace DIContexts
             this.Container.Bind<LevelManager>().AsSingle();
             this.Container.Bind<SettingManager>().AsSingle();
             this.Container.Bind<AssetService>().AsSingle();
+            
+            this.Container.Bind<Initialiser>().FromComponentInHierarchy().AsSingle();
         }
     }
 }

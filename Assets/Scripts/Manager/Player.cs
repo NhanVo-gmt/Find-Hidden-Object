@@ -59,7 +59,7 @@ public class Player : MonoBehaviour
     void FindItem(Item item)
     {
         MasterAudio.Instance.PlaySound(sound);
-        levelManager.SelectItem(item.Id, item.Index);
+        levelManager.SelectItem(item);
         item.Click();
 
         findParticle.transform.position = item.transform.position;

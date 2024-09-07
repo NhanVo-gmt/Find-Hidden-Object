@@ -11,6 +11,10 @@ namespace Watermelon
     [HelpURL("https://docs.google.com/document/d/1t5BJKOd3aTBAT9mrpi8ujRo-Cz3wWVF2Cc2PSswACsQ")]
     public class Tween : MonoBehaviour
     {
+        public int tweensUpdateCount;
+        public int tweensFixedUpdateCount;
+        public int tweensLateUpdateCount;
+        
         private static Tween instance;
 
         #region Update Tween
@@ -113,7 +117,7 @@ namespace Watermelon
 #endif
         }
 
-        public void Init(int tweensUpdateCount, int tweensFixedUpdateCount, int tweensLateUpdateCount, bool systemLogs)
+        void Start()
         {
             updateTweens = new TweenCase[tweensUpdateCount];
             fixedTweens = new TweenCase[tweensFixedUpdateCount];

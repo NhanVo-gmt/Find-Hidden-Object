@@ -9,24 +9,30 @@ namespace UserData.Controller
     using System.Linq;
     using Blueprints;
     using GameFoundation.Scripts.UIModule.ScreenFlow.Managers;
+    using GameFoundation.Scripts.UIModule.Utilities.GameQueueAction;
+    using Transactions.Blueprint;
+    using Watermelon;
 
     public class LevelManager : BaseDataManager<UserProfile>
     {
         #region Inject
 
-        private readonly LevelBlueprint  levelBlueprint;
-        private readonly ScreenManager   screenManager;
-        private readonly CurrencyManager currencyManager;
+        private readonly LevelBlueprint         levelBlueprint;
+        private readonly ScreenManager          screenManager;
+        private readonly CurrencyManager        currencyManager;
+        private readonly AssetService           assetService;
 
         #endregion
 
         public Action OnUseHint;
         
-        public LevelManager(MasterDataManager masterDataManager, LevelBlueprint levelBlueprint, ScreenManager screenManager, CurrencyManager currencyManager) : base(masterDataManager)
+        public LevelManager(MasterDataManager masterDataManager, LevelBlueprint levelBlueprint, ScreenManager screenManager, 
+                            CurrencyManager currencyManager, AssetService assetService) : base(masterDataManager)
         {
             this.levelBlueprint  = levelBlueprint;
             this.screenManager   = screenManager;
             this.currencyManager = currencyManager;
+            this.assetService    = assetService;
         }
 
         protected override void OnDataLoaded()
@@ -133,10 +139,10 @@ namespace UserData.Controller
             GetCurrentLevelLog().OnCompleted += ShowCompletedScreen;
         }
 
-        public void SelectItem(string id, int index)
+        public void SelectItem(Item item)
         {
             LevelLog levelLog = this.Data.levelLogs[GetCurrentLevel().Id];
-            levelLog.LevelItemLogs[id].SelectItem(index);
+            levelLog.LevelItemLogs[item.Id].SelectItem(item.Index);
         }
 
         public void ShowCompletedScreen()
