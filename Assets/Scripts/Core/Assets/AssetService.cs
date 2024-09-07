@@ -1,6 +1,11 @@
 using System;
-using DG.Tweening;
+using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
+using GameFoundation.Scripts.AssetLibrary;
 using GameFoundation.Scripts.Utilities.ObjectPool;
+using Transactions.Blueprint;
+using Transactions.Manager;
+using Transactions.Model;
 using UnityEngine;
 using UnityEngine.UI;
 using Watermelon;
@@ -10,13 +15,54 @@ using Tween = Watermelon.Tween;
 
 public class AssetService
 {
-    private readonly ObjectPoolManager objectPoolManager;
+    private readonly ObjectPoolManager   objectPoolManager;
+    private readonly ITransactionManager transactionManager;
+    private readonly IGameAssets         gameAssets;
 
-    private FloatingCloudSetting floatingCloudSetting;
+    private FloatingCloudSetting                                  floatingCloudSetting;
+    private Dictionary<string, Dictionary<string, RectTransform>> assetFlyingTargetTransforms = new();
 
     public AssetService(ObjectPoolManager objectPoolManager)
     {
         this.objectPoolManager = objectPoolManager;
+    }
+
+    // public async UniTask<Sprite> GetCurrencyIcon(string currencyId)
+    // {
+    //     return await this.gameAssets.LoadAssetAsync<Sprite>(this.WalletManager.GetStaticData(currencyId).Icon);
+    // }
+
+    public async UniTask<Sprite> GetAssetIcon(string assetType, string assetId)
+    {
+        var assetIconPath = assetType switch
+        {
+            // AssetDefaultType.Currency => this.WalletManager.GetStaticData(assetId).Icon,
+            // AssetDefaultType.Item => this.itemController.GetItemRecord(assetId).Icon,
+            _ => string.Empty
+        };
+
+        if (string.IsNullOrEmpty(assetIconPath))
+            return null;
+
+        return await this.gameAssets.LoadAssetAsync<Sprite>(assetIconPath);
+    }
+    
+    public void RegisterAssetFlyingTarget(string assetType, string assetId, RectTransform targetTransform)
+    {
+        if (!this.assetFlyingTargetTransforms.ContainsKey(assetType))
+            this.assetFlyingTargetTransforms.Add(assetType, new Dictionary<string, RectTransform>());
+
+        this.assetFlyingTargetTransforms[assetType][assetId] = targetTransform;
+    }
+    
+    private bool TryGetAssetFlyingTarget(string assetType, string assetId, out RectTransform targetTransform)
+    {
+        targetTransform = null;
+        if (!this.assetFlyingTargetTransforms.ContainsKey(assetType))
+            return false;
+        return this.assetFlyingTargetTransforms[assetType].TryGetValue(assetId, out targetTransform) ||
+               // If assetId is empty, try to get default target
+               this.assetFlyingTargetTransforms[assetType].TryGetValue("", out targetTransform);
     }
     
     private class FloatingCloudSetting
@@ -27,10 +73,47 @@ public class AssetService
         public float      CloudRadius;
     }
     
-    public void SpawnAssetCloud(Sprite    sprite,              Transform rewardTransform,
-                                    Transform targetRectTransform, int       elementsAmount,
-                                    Action    onAssetHittedTarget = null,
-                                    Action    onComplete          = null)
+    public async UniTask ClaimRewardWithAnimation(List<Asset> assets, Transform rewardTransform)
+    {
+        var completeSource = new UniTaskCompletionSource();
+        this.SpawnAssetsCloud(assets, rewardTransform, asset =>
+            {
+                this.transactionManager.ReceivePayout(asset);
+            },
+            () =>
+            {
+                completeSource.TrySetResult();
+            });
+                
+        await completeSource.Task;
+    }
+    
+    public void SpawnAssetsCloud(List<Asset> assets, Transform rewardTransform, Action<Asset> onAssetHittedTarget, Action onComplete = null)
+    {
+        for (var index = 0; index < assets.Count; index++)
+        {
+            var asset = assets[index];
+            this.SpawnAssetCloud(asset.AssetType, asset.AssetId, rewardTransform, asset.Amount, delegate { onAssetHittedTarget?.Invoke(asset); }, index == assets.Count - 1 ? onComplete : null);
+        }
+    }
+    
+    public void SpawnAssetCloud(string assetType, string assetId, Transform rewardTransform, int elementsAmount, Action onAssetHittedTarget = null, Action onComplete = null)
+    {
+        if (!this.TryGetAssetFlyingTarget(assetType, assetId, out var targetRectTransform))
+        {
+            Debug.LogWarning($"Target transform for asset {assetType} - {assetId} not found!");
+            onAssetHittedTarget?.Invoke();
+            onComplete?.Invoke();
+            return;
+        }
+            
+        SpawnAssetCloud(assetType, assetId, rewardTransform, targetRectTransform, elementsAmount, onAssetHittedTarget, onComplete);
+    }
+    
+    public void SpawnAssetCloud(string    assetType,           string assetId, Transform rewardTransform,
+                                Transform targetRectTransform, int    elementsAmount,
+                                Action    onAssetHittedTarget = null,
+                                Action    onComplete          = null)
         {
             
             var targetObject = new GameObjectWrapper(targetRectTransform.gameObject);
@@ -62,7 +145,7 @@ public class AssetService
                 elementObject.transform.localScale    = Vector3.one;
 
                 Image elementImage = elementObject.GetComponent<Image>();
-                elementImage.sprite = sprite;
+                this.GetAssetIcon(assetType, assetId).ContinueWith(delegate(Sprite sprite) { elementImage.sprite = sprite; });
                 elementImage.color  = Color.white.SetAlpha(0);
 
                 float moveTime = Random.Range(0.6f, 0.8f);
@@ -102,8 +185,8 @@ public class AssetService
                                 if (punchTarget)
                                 {
                                     // Play collect sound
-                                    if (this.floatingCloudSetting.CollectAudioClip != null)
-                                        // AudioController.PlaySound(this.floatingCloudSetting.CollectAudioClip, pitch: defaultPitch);
+                                    // if (this.floatingCloudSetting.CollectAudioClip != null)
+                                    //     AudioController.PlaySound(this.floatingCloudSetting.CollectAudioClip, pitch: defaultPitch);
 
                                     defaultPitch += 0.01f;
 
