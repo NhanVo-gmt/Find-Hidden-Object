@@ -5,6 +5,7 @@ using Cysharp.Threading.Tasks;
 using GameFoundation.Scripts.AssetLibrary;
 using GameFoundation.Scripts.UIModule.MVP;
 using GameFoundation.Scripts.UIModule.ScreenFlow.BaseScreen.View;
+using GameFoundation.Scripts.UIModule.ScreenFlow.Managers;
 using GameFoundation.Scripts.Utilities.Extension;
 using TMPro;
 using Transactions.Blueprint;
@@ -28,26 +29,29 @@ public class GameFooterItemView : TViewMono
     public Image           image;
     public TextMeshProUGUI numText;
     public RectTransform   middle;
+    public RectTransform   rectTransform;
 }
 
 public class GameFooterItemPresenter : BaseUIItemPresenter<GameFooterItemView, GameFooterItemModel>
 {
     #region Inject
 
-    private readonly IGameAssets gameAssets;
-    private readonly ItemManager itemManager;
+    private readonly AssetService   assetService;
+    private readonly ItemManager    itemManager;
+    private readonly IGameAssets    gameAssets;
+    private readonly IScreenManager screenManager;
 
     #endregion
 
     private GameFooterItemModel model;
-    private AssetService        assetService;
     private ItemRecord          itemRecord;
     
-    public GameFooterItemPresenter(IGameAssets gameAssets, ItemManager itemManager, AssetService assetService) : base(gameAssets)
+    public GameFooterItemPresenter(IGameAssets gameAssets, ItemManager itemManager, AssetService assetService, IScreenManager screenManager) : base(gameAssets)
     {
-        this.gameAssets   = gameAssets;
-        this.itemManager  = itemManager;
-        this.assetService = assetService;
+        this.assetService  = assetService;
+        this.itemManager   = itemManager;
+        this.gameAssets    = gameAssets;
+        this.screenManager = screenManager;
     }
     
     public override async void BindData(GameFooterItemModel model)
@@ -68,6 +72,9 @@ public class GameFooterItemPresenter : BaseUIItemPresenter<GameFooterItemView, G
 
     void OnUpdateProgress(int number)
     {
+        Vector2 position = ScreenPointToAnchoredPosition(Input.mousePosition);
+        this.View.middle.anchoredPosition = position;
+        
         this.assetService.SpawnAssetCloud(AssetDefaultType.Item, itemRecord.Id, this.View.image.sprite, this.View.middle, 1, () =>
         {
 
@@ -76,6 +83,20 @@ public class GameFooterItemPresenter : BaseUIItemPresenter<GameFooterItemView, G
             UpdateNumText(number);
         });
     }
+    
+    protected Vector2 ScreenPointToAnchoredPosition(Vector2 screenPosition)
+    {
+        Vector2 localPoint = Vector2.zero;
+        if (RectTransformUtility.ScreenPointToLocalPointInRectangle(this.View.rectTransform, screenPosition, this.screenManager.RootUICanvas.UICamera, out localPoint))
+        {
+            Vector2 pivotOffset = this.View.rectTransform.pivot * this.View.rectTransform.sizeDelta;
+            pivotOffset.y += 100;
+            return localPoint - (this.View.rectTransform.anchorMax * this.View.rectTransform.sizeDelta) + pivotOffset;
+        }
+
+        return Vector2.zero;
+    }
+    
 
     void UpdateNumText(int number)
     {
